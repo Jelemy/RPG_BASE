@@ -1,0 +1,8 @@
+*.exe
+*.dll
+*.out
+lib/
+sdl/
+rapidjson/
+.vscode/
+Makefile
