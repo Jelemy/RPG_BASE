@@ -16,7 +16,22 @@ battleDrawer* battleMenuState::bDrawer = nullptr;
 
 void battleActionState::init()
 {
-	battleMenuState::bDrawer = battleActionState::bDrawer;
+	SDL_Surface* tempSurface = IMG_Load("assets/start.jpg");
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+    SDL_Rect srcRect, destRect;
+    srcRect.w = 640;
+    srcRect.h = 480;
+    srcRect.x = 0;
+    srcRect.y = 0;
+    destRect.w = 640;
+    destRect.h = 480;
+    destRect.x = 0;
+    destRect.y = 0;
+    SDL_RenderClear(game::renderer);
+    SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
+    SDL_RenderPresent(game::renderer);
+	printf("hello\n");
 }
 
 void battleActionState::clean()
@@ -36,46 +51,20 @@ void battleActionState::resume()
 
 void battleActionState::handleEvents(game* game)
 {
-	SDL_Event event;
+	
+}
 
-	if (SDL_PollEvent(&event)) {
-		switch (event.type) {
-			case SDL_QUIT:
-				game->quit();
-				break;
-
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym) {
-					case SDLK_SPACE:
-						game->changeState( battleMenuState::instance() );
-						//currAction = 1;
-						break;
-
-					case SDLK_ESCAPE:
-						game->quit();
-						break;
-				}
-				break;
-		}
-	}
+void battleActionState::handleSubEvents(battleState* battle)
+{
+	
 }
 
 void battleActionState::update(game* game) 
 {
-
+	
 }
 
 void battleActionState::draw(game* game) 
 {
-    SDL_RenderClear(game::renderer);
-    if (bDrawer == nullptr) {
-        std::cout << "hello" << std::endl;
-    }
-    //std::cout << "hello" << std::endl;
-    bDrawer->drawBG();
-    bDrawer->drawMessage();
-    bDrawer->drawText(actionList[currAction]->enact());
-	//currAction = 1;
-    SDL_RenderPresent(game::renderer);
 
 }

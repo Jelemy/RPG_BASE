@@ -4,6 +4,7 @@
 #include <gameState.h>
 #include <overWorldState.h>
 #include <battleState.h>
+#include <battleActionState.h>
 
 
 battleState battleState::m_battleState;
@@ -14,65 +15,7 @@ battleDrawer* battleState::bDrawer = nullptr;
 
 void battleState::init()
 {
-
-	// for purpose of testing: create party and enemy entities and add stats component
-	// Load party and enemies into battle manager called battle
-	// initialise first battle state: enemy encounter message
-	auto& party1(manager1.addEntity());
-	auto& party2(manager1.addEntity());
-	auto& enemy1(manager1.addEntity());
-	auto& enemy2(manager1.addEntity());
-
-	auto& uiMenu(manager1.addEntity());
-	auto& uiSubMenu(manager1.addEntity());
-	auto& uiPartyBox1(manager1.addEntity());
-	auto& uiPartyBox2(manager1.addEntity());
-	auto& uiArrow(manager1.addEntity());
-	auto& uiMessage(manager1.addEntity());
-	auto& bg(manager1.addEntity());
-
-	std::vector<std::string> arts1 = {"Fire", "Mega Bash"};
-	std::vector<std::string> arts2 = {"Heal"};
-    // make arts dictionary
-	
-
-
-	party1.addComponent<statsComponent>("party1", 100, 100, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
-	party2.addComponent<statsComponent>("party2", 100, 100, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
-	enemy1.addComponent<statsComponent>("enemy1", 100, 100, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
-	enemy2.addComponent<statsComponent>("enemy2", 100, 100, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
-
-	uiMenu.addComponent<tSpriteComponent>("assets/menubox.png", 40, 150);
-	uiSubMenu.addComponent<tSpriteComponent>("assets/menuboxsub.png", 147, 150);
-	uiPartyBox1.addComponent<tSpriteComponent>("assets/partyBox2.png", 147, 420);
-	uiPartyBox2.addComponent<tSpriteComponent>("assets/partyBox2.png", 330, 420);
-	uiArrow.addComponent<tSpriteComponent>("assets/arrow.png", 50, 170);
-	uiMessage.addComponent<tSpriteComponent>("assets/dialoguebox.png", 121, 22);
-	bg.addComponent<tSpriteComponent>("assets/plain.png", 0, 0);
-
-	std::vector<Entity*> playerParty = {&party1, &party2};
-	std::vector<Entity*> enemyParty = {&enemy1, &enemy2};
-	std::vector<Entity*> ui = {&uiMenu, &uiSubMenu, &uiPartyBox1, &uiPartyBox2, &uiMessage, &bg, &uiArrow};
-
-	//std::cout << enemyParty[1]->getComponent<statsComponent>().trns() << std::endl;
-
-	battle = new battleManager(playerParty, enemyParty);
-	bDrawer = new battleDrawer(playerParty, enemyParty, ui);
-/*
-	std::cout << battle->getTurn()->getComponent<statsComponent>().spd() << std::endl;
-	std::cout << enemy2.getComponent<statsComponent>().HP() << std::endl;
-	std::cout << party1.getComponent<statsComponent>().MP() << std::endl;
-	std::cout << party1.getComponent<statsComponent>().trns() << std::endl;
-	std::cout << party2.getComponent<statsComponent>().trns() << std::endl;
-	battle->performArt(0, 1);
-	std::cout << battle->getTurn()->getComponent<statsComponent>().spd() << std::endl;
-	battle->performAttack(1);
-	std::cout << enemy2.getComponent<statsComponent>().HP() << std::endl;
-	std::cout << party1.getComponent<statsComponent>().MP() << std::endl;
-	std::cout << party1.getComponent<statsComponent>().trns() << std::endl;
-	std::cout << party2.getComponent<statsComponent>().trns() << std::endl;
-*/
-
+	this->changeBattleState(battleActionState::instance());
 }
 
 void battleState::changeBattleState(battleState* state) 
@@ -118,8 +61,6 @@ void battleState::popBattleState()
 void battleState::clean()
 {
 	printf("battleState Cleanup\n");
-	delete battle;
-	delete bDrawer;
 }
 
 void battleState::pause()
@@ -136,7 +77,6 @@ void battleState::handleEvents(game* game)
 {
 	// let current battle state handle events
 	SDL_Event event;
-
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_QUIT:
@@ -156,20 +96,23 @@ void battleState::handleEvents(game* game)
 				break;
 		}
 	}
+
+	battleStates.back()->handleSubEvents(this);
 }
 
+
+void battleState::handleSubEvents(battleState* battle)
+{
+	
+}
 void battleState::update(game* game) 
 {
+	battleStates.back()->update(game);
 }
 
 void battleState::draw(game* game) 
 {
-	SDL_RenderClear(game::renderer);
-	bDrawer->drawBG();
-	bDrawer->drawMenu();
-	bDrawer->drawSubMenu();
-	bDrawer->drawPartyBox();
-	bDrawer->drawMessage();
-	//bDrawer->drawSelect();
-	SDL_RenderPresent(game::renderer);
+	//SDL_RenderClear(game::renderer);
+	battleStates.back()->draw(game);
+	//SDL_RenderPresent(game::renderer);
 }

@@ -5,10 +5,11 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "action.h"
+#include "battleState.h"
 
 typedef std::vector<action*> actions;
 
-class battleActionState : public gameState
+class battleActionState : public battleState
 {
 public:
 	static battleDrawer* bDrawer;
@@ -22,6 +23,7 @@ public:
 	void resume();
 
 	void handleEvents(game* game);
+	void handleSubEvents(battleState* battle);
 	void update(game* game);
 	void draw(game* game);
 

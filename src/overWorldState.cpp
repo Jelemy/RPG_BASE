@@ -4,6 +4,7 @@
 #include <gameState.h>
 #include <overWorldState.h>
 #include <battleActionState.h>
+#include <battleState.h>
 #include <battleMenuState.h>
 #include <action.h>
 #include <ECS.h>
@@ -112,7 +113,7 @@ void overWorldState::handleEvents(game* game)
 				switch (event.key.keysym.sym) {
 					case SDLK_SPACE:
 					{
-						game->changeState( battleActionState::instance() );
+						game->changeState( battleState::instance() );
 						break;
 					}
 					case SDLK_ESCAPE:
