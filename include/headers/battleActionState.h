@@ -7,13 +7,12 @@
 #include "action.h"
 #include "battleState.h"
 
-typedef std::vector<action*> actions;
+typedef std::vector<std::unique_ptr<action>> actions;
 
 class battleActionState : public battleState
 {
 public:
 	static battleDrawer* bDrawer;
-	static actions actionList;
 	int currAction = 0;
 
 	void init();
@@ -27,15 +26,20 @@ public:
 	void update(game* game);
 	void draw(game* game);
 
-	static battleActionState* instance() {
-		return &m_battleActionState;
+	bool isCreatedWithNew() const override {
+        return true;
+    }
+
+	static battleActionState* createInstance(actions a) {
+    	battleActionState* instance = new battleActionState(std::move(a));  // Only created once
+    	return instance;
 	}
 
-protected:
-	battleActionState() { }
 
 private:
-	static battleActionState m_battleActionState;
+	actions actionList;
+	battleActionState(actions a);
+	//static battleActionState m_battleActionState;
 	SDL_Surface* bg;
 
 };

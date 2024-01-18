@@ -1,15 +1,33 @@
 #include <battleDrawer.h>
+#include <textureManager.h>
+#include <global.h>
 
-
-battleDrawer::battleDrawer(entities &playerP, entities &enemyP, entities &ui)
+battleDrawer::battleDrawer(entities &playerP, entities &enemyP)
 {
     playerParty = playerP;
     enemyParty = enemyP;
-    uiBoxes = ui;
     partyTurn = false;
     entityTurn = nullptr;
     text = new textManager();
     text->setFont("assets/glyphAtlas.png", 50, {255, 255, 255, 255});
+
+	auto& uiMenu(manager.addEntity());
+	auto& uiSubMenu(manager.addEntity());
+	auto& uiPartyBox1(manager.addEntity());
+	auto& uiPartyBox2(manager.addEntity());
+	auto& uiArrow(manager.addEntity());
+	auto& uiMessage(manager.addEntity());
+	auto& bg(manager.addEntity());
+
+    uiMenu.addComponent<tSpriteComponent>("assets/menubox.png", 40, 150);
+	uiSubMenu.addComponent<tSpriteComponent>("assets/menuboxsub.png", 147, 150);
+	uiPartyBox1.addComponent<tSpriteComponent>("assets/partyBox2.png", 147, 420);
+	uiPartyBox2.addComponent<tSpriteComponent>("assets/partyBox2.png", 330, 420);
+	uiArrow.addComponent<tSpriteComponent>("assets/arrow.png", 50, 170);
+	uiMessage.addComponent<tSpriteComponent>("assets/dialoguebox.png", 121, 22);
+	bg.addComponent<tSpriteComponent>("assets/plain.png", 0, 0);
+
+    uiBoxes = {&uiMenu, &uiSubMenu, &uiPartyBox1, &uiPartyBox2, &uiMessage, &bg, &uiArrow};
 
 }
 
@@ -44,6 +62,7 @@ void battleDrawer::drawText(string txt){
 }
 void battleDrawer::drawSubMenu(){
     uiBoxes[1]->getComponent<tSpriteComponent>().draw();
+
 }
 void battleDrawer::drawPartyBox(){
     uiBoxes[2]->getComponent<tSpriteComponent>().draw();

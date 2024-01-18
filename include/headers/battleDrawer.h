@@ -22,7 +22,7 @@ private:
     textManager* text;
 
 public:
-    battleDrawer(entities &playerP, entities &enemyP, entities &ui);
+    battleDrawer(entities &playerP, entities &enemyP);
     void setTurn(Entity* e);
     void drawMenu();
     void drawSubMenu();

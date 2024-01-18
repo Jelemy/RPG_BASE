@@ -5,17 +5,17 @@
 #include <battleActionState.h>
 #include <battleMenuState.h>
 
-
-
-battleActionState battleActionState::m_battleActionState;
-
 // Manager is a class that manages all the entities.
 
 
 battleDrawer* battleMenuState::bDrawer = nullptr;
 
+battleActionState::battleActionState (actions a) : actionList(std::move(a)){
+}
+
 void battleActionState::init()
 {
+
 	SDL_Surface* tempSurface = IMG_Load("assets/start.jpg");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
@@ -32,6 +32,7 @@ void battleActionState::init()
     SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
     SDL_RenderPresent(game::renderer);
 	printf("hello\n");
+    std::cout << actionList[0]->enact() << std::endl;
 }
 
 void battleActionState::clean()

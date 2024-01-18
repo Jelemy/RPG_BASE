@@ -17,9 +17,6 @@ class battleDrawer;
 class battleState : public gameState
 {
 public:
-
-	static battleManager* battle;
-	static battleDrawer* bDrawer;
 	//static std::unordered_map<string, artInfo> artsInfo;
 	void init();
 	void clean();
@@ -35,6 +32,11 @@ public:
 	static battleState* instance() {
 		return &m_battleState;
 	}
+
+	virtual bool isCreatedWithNew() const {
+        return false;  // Override in derived classes as needed
+    }
+
 	void changeBattleState(battleState* state);
 	void pushBattleState(battleState* state);
 	void popBattleState();

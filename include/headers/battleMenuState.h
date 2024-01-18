@@ -6,7 +6,6 @@
 #include "SDL_image.h"
 #include "action.h"
 
-typedef std::vector<action*> actions;
 enum menuLayer
 {
     ACT, ART

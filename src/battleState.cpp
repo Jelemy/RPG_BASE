@@ -5,17 +5,43 @@
 #include <overWorldState.h>
 #include <battleState.h>
 #include <battleActionState.h>
-
+#include <global.h>
+#include <battleGlobal.h>
 
 battleState battleState::m_battleState;
 
-Manager manager1;
-battleManager* battleState::battle = nullptr;
-battleDrawer* battleState::bDrawer = nullptr;
+battleManager* bManager;
+battleDrawer* bDrawer;
+entities enemyParty;
 
 void battleState::init()
 {
-	this->changeBattleState(battleActionState::instance());
+	std::vector<std::unique_ptr<action>> initialActions;
+
+	// Adding actions to the list
+	initialActions.push_back(std::make_unique<action>(BATTLESTART));
+	initialActions.push_back(std::make_unique<action>(VICTORY));
+
+	battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
+
+	this->changeBattleState(nextState);
+	std::cout << playerParty[0]->getComponent<statsComponent>().HP() << std::endl;
+
+	std::vector<std::string> arts1 = {"Fire", "Mega Bash"};
+
+	auto& enemy1(manager.addEntity());
+	auto& enemy2(manager.addEntity());
+	enemy1.addComponent<statsComponent>("enemy1", 100, 100, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
+	enemy2.addComponent<statsComponent>("enemy2", 100, 100, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
+	enemyParty = {&enemy1, &enemy2};
+
+	bManager = new battleManager(playerParty, enemyParty);
+	bDrawer = new battleDrawer(playerParty, enemyParty);
+
+	//making it so that we make use of global variables instead of simply juts passing
+
+
+	
 }
 
 void battleState::changeBattleState(battleState* state) 
@@ -86,7 +112,7 @@ void battleState::handleEvents(game* game)
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
 					case SDLK_SPACE:
-						game->changeState( overWorldState::instance() );
+						game->popState();
 						break;
 
 					case SDLK_ESCAPE:
@@ -112,7 +138,11 @@ void battleState::update(game* game)
 
 void battleState::draw(game* game) 
 {
-	//SDL_RenderClear(game::renderer);
-	battleStates.back()->draw(game);
-	//SDL_RenderPresent(game::renderer);
+	SDL_RenderClear(game::renderer);
+	bDrawer->drawBG();
+	bDrawer->drawMenu();
+	bDrawer->drawSubMenu();
+	bDrawer->drawPartyBox();
+	bDrawer->drawMessage();
+	SDL_RenderPresent(game::renderer);
 }
