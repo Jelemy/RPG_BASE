@@ -3,6 +3,7 @@
 #include <game.h>
 #include <gameState.h>
 #include <battleMenuState.h>
+#include <battleGlobal.h>
 
 
 
@@ -16,6 +17,7 @@ battleMenuState battleMenuState::m_battleMenuState;
 
 void battleMenuState::init()
 {
+    printf("menu\n");
 
 }
 
@@ -36,13 +38,15 @@ void battleMenuState::resume()
 
 void battleMenuState::handleEvents(game* game)
 {
-	SDL_Event event;
+
+}
+
+void battleMenuState::handleSubEvents(battleState* battle)
+{
+    SDL_Event event;
 
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
-			case SDL_QUIT:
-				game->quit();
-				break;
 
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
@@ -75,9 +79,6 @@ void battleMenuState::handleEvents(game* game)
                         }
                  
                         break;
-					case SDLK_ESCAPE:
-						game->quit();
-						break;
 				}
 				break;
 		}
@@ -91,13 +92,8 @@ void battleMenuState::update(game* game)
 
 void battleMenuState::draw(game* game) 
 {
-    SDL_RenderClear(game::renderer);
-
-    bDrawer->drawBG();
     bDrawer->drawMenu();
     bDrawer->drawSelect(selectMove);
     selectMove = 0;
-
-    SDL_RenderPresent(game::renderer);
 
 }

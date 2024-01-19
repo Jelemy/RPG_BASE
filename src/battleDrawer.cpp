@@ -23,7 +23,7 @@ battleDrawer::battleDrawer(entities &playerP, entities &enemyP)
 	uiSubMenu.addComponent<tSpriteComponent>("assets/menuboxsub.png", 147, 150);
 	uiPartyBox1.addComponent<tSpriteComponent>("assets/partyBox2.png", 147, 420);
 	uiPartyBox2.addComponent<tSpriteComponent>("assets/partyBox2.png", 330, 420);
-	uiArrow.addComponent<tSpriteComponent>("assets/arrow.png", 50, 170);
+	uiArrow.addComponent<tSpriteComponent>("assets/arrow.png", 50, 193);
 	uiMessage.addComponent<tSpriteComponent>("assets/dialoguebox.png", 121, 22);
 	bg.addComponent<tSpriteComponent>("assets/plain.png", 0, 0);
 

@@ -11,11 +11,9 @@ enum menuLayer
     ACT, ART
 };
 
-class battleMenuState : public gameState
+class battleMenuState : public battleState
 {
 public:
-	static battleDrawer* bDrawer;
-	static battleManager* bm;
 	menuLayer currLayer = ACT;
     int actionSelect = 0;
     int artSelect = -1;
@@ -28,6 +26,7 @@ public:
 	void resume();
 
 	void handleEvents(game* game);
+	void handleSubEvents(battleState* battle) override;
 	void update(game* game);
 	void draw(game* game);
 

@@ -21,9 +21,7 @@ entities playerParty;
 // new
 battleManager* overWorldState::battle = nullptr;
 battleDrawer* overWorldState::bDrawer = nullptr;
-battleDrawer* battleActionState::bDrawer = overWorldState::bDrawer;
 battleManager* action::bm = overWorldState::battle;
-battleManager* battleMenuState::bm = overWorldState::battle;
 // new
 
 

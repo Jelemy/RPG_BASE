@@ -12,7 +12,6 @@ typedef std::vector<std::unique_ptr<action>> actions;
 class battleActionState : public battleState
 {
 public:
-	static battleDrawer* bDrawer;
 	int currAction = 0;
 
 	void init();
@@ -22,7 +21,7 @@ public:
 	void resume();
 
 	void handleEvents(game* game);
-	void handleSubEvents(battleState* battle);
+	void handleSubEvents(battleState* battle) override;
 	void update(game* game);
 	void draw(game* game);
 

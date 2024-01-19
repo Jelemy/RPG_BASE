@@ -4,33 +4,15 @@
 #include <gameState.h>
 #include <battleActionState.h>
 #include <battleMenuState.h>
+#include <battleGlobal.h>
 
 // Manager is a class that manages all the entities.
-
-
-battleDrawer* battleMenuState::bDrawer = nullptr;
 
 battleActionState::battleActionState (actions a) : actionList(std::move(a)){
 }
 
 void battleActionState::init()
 {
-
-	SDL_Surface* tempSurface = IMG_Load("assets/start.jpg");
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
-    SDL_FreeSurface(tempSurface);
-    SDL_Rect srcRect, destRect;
-    srcRect.w = 640;
-    srcRect.h = 480;
-    srcRect.x = 0;
-    srcRect.y = 0;
-    destRect.w = 640;
-    destRect.h = 480;
-    destRect.x = 0;
-    destRect.y = 0;
-    SDL_RenderClear(game::renderer);
-    SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
-    SDL_RenderPresent(game::renderer);
 	printf("hello\n");
     std::cout << actionList[0]->enact() << std::endl;
 }
@@ -57,7 +39,29 @@ void battleActionState::handleEvents(game* game)
 
 void battleActionState::handleSubEvents(battleState* battle)
 {
-	
+
+	SDL_Event event;
+	if (SDL_PollEvent(&event)) {
+		switch (event.type) {
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym) {
+					case SDLK_RIGHT:
+                        printf("HI");
+                        if (currAction < actionList.size() - 1) {
+							printf("lol");
+                            currAction++;
+							std::cout << currAction << std::endl;
+							std::cout << actionList.size() << std::endl;
+                        }
+						else if  (currAction == actionList.size() - 1) {
+							printf("menu");
+							battle->changeBattleState(battleMenuState::instance());
+						}
+                        break;	
+				}
+				break;
+		}
+	}
 }
 
 void battleActionState::update(game* game) 
@@ -67,5 +71,6 @@ void battleActionState::update(game* game)
 
 void battleActionState::draw(game* game) 
 {
-
+    bDrawer->drawMessage();
+    bDrawer->drawText(actionList[currAction]->enact());
 }

@@ -102,6 +102,8 @@ void battleState::resume()
 void battleState::handleEvents(game* game)
 {
 	// let current battle state handle events
+	battleStates.back()->handleSubEvents(this);
+
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -122,15 +124,8 @@ void battleState::handleEvents(game* game)
 				break;
 		}
 	}
-
-	battleStates.back()->handleSubEvents(this);
 }
 
-
-void battleState::handleSubEvents(battleState* battle)
-{
-	
-}
 void battleState::update(game* game) 
 {
 	battleStates.back()->update(game);
@@ -140,9 +135,6 @@ void battleState::draw(game* game)
 {
 	SDL_RenderClear(game::renderer);
 	bDrawer->drawBG();
-	bDrawer->drawMenu();
-	bDrawer->drawSubMenu();
-	bDrawer->drawPartyBox();
-	bDrawer->drawMessage();
+	battleStates.back()->draw(game);
 	SDL_RenderPresent(game::renderer);
 }
