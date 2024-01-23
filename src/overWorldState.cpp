@@ -15,16 +15,7 @@ overWorldState overWorldState::m_overWorldState;
 
 // Manager is a class that manages all the entities.
 Manager manager;
-//hey
 entities playerParty;
-
-// new
-battleManager* overWorldState::battle = nullptr;
-battleDrawer* overWorldState::bDrawer = nullptr;
-battleManager* action::bm = overWorldState::battle;
-// new
-
-
 
 // How you add an entity. auto& automatically assigns a variable type.
 auto& entity(manager.addEntity());
@@ -45,7 +36,7 @@ void overWorldState::init()
 	auto& enemy1(manager.addEntity());
 	auto& enemy2(manager.addEntity());
 
-	std::vector<std::string> arts1 = {"Fire", "Mega Bash"};
+	std::vector<std::string> arts1 = {"Fire", "Mega Bash", "Heal"};
 	std::vector<std::string> arts2 = {"Heal"};
     // make arts dictionary
 	

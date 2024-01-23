@@ -179,7 +179,7 @@ void battleManager::performHeal(string artName, Entity* recipient) {
 
 void battleManager::performArt(int artIndex, int recipientIndex)
 {
-    string artName = entityTurn->getComponent<statsComponent>().art(artIndex);
+    string artName = entityTurn->getComponent<statsComponent>().art()[artIndex];
     string artType = get<0>(artsInfo[artName]);
     if (partyTurn) {
         if (artType == "magic_damage") {

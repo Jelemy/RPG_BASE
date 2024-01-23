@@ -8,6 +8,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "SDL_ttf.h"
+#include "battleGlobal.h"
 
 class battleManager;
 class battleState;
@@ -25,11 +26,11 @@ public:
     battleDrawer(entities &playerP, entities &enemyP);
     void setTurn(Entity* e);
     void drawMenu();
-    void drawSubMenu();
+    void drawSubMenu(int currPlayer);
     void drawPartyBox();
     void drawMessage();
     void drawBG();
-    void drawSelect(int move);
+    void drawSelect(int move, int action, menuLayer menu);
     void drawText(string txt);
 
 

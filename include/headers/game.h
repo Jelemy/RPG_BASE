@@ -1,4 +1,3 @@
-
 #ifndef game_h
 #define game_h
 
@@ -9,6 +8,7 @@
 #include <stdio.h>
 #include <vector>
 #include <string>
+#include <iostream>
 using namespace std;
 
 class gameState;

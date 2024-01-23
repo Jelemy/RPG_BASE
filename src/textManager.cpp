@@ -46,14 +46,14 @@ void textManager::displayText(string text, int x, int y)
     src.h = texH/9;
     dst.x = x;
     dst.y = y;
-    dst.w = (texW/9)/7;
-    dst.h = (texH/9)/7.5;
+    dst.w = (texW/9)/6;
+    dst.h = (texH/9)/6.5;
 
     for (char c : text) {
         src.x = get<0>(glyphs[c]) *texW/9;
         src.y = get<1>(glyphs[c]) *texH/9;
         SDL_RenderCopy(game::renderer, glyphAtlas, &src, &dst);
-        dst.x += (texW/9)/10;
+        dst.x += (texW/9)/11;
     }
 
 }

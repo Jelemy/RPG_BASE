@@ -6,7 +6,14 @@
 #include "battleManager.h"
 #include "battleDrawer.h"
 
+class battleManager;
+class battleDrawer;
 typedef std::vector<Entity*> entities;
+
+enum menuLayer
+{
+    ACT, ART
+};
 
 extern entities enemyParty;
 extern battleManager* bManager;

@@ -53,7 +53,7 @@ public:
     int dex() { return dexterity; }
     int def() { return defense; }
     int res() {return resistance; }
-    string art(int index) { return artsList[index];}
+    arts art() { return artsList;}
     string nme() { return name; }
     
 

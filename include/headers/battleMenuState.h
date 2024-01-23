@@ -5,11 +5,7 @@
 #include "SDL.h"
 #include "SDL_image.h"
 #include "action.h"
-
-enum menuLayer
-{
-    ACT, ART
-};
+#include "battleGlobal.h"
 
 class battleMenuState : public battleState
 {
@@ -18,6 +14,10 @@ public:
     int actionSelect = 0;
     int artSelect = -1;
     int selectMove = 0;
+	bool arts = false;
+	bool bash = false;
+	int currPlayer = 0;
+	int optionMax = 1;
 
 	void init();
 	void clean();
