@@ -8,6 +8,5 @@ typedef std::vector<Entity*> entities;
 
 extern Manager manager;
 extern entities playerParty;
-extern entities enemyParty;
 
 #endif

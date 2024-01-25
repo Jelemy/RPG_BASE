@@ -40,6 +40,9 @@ protected:
 private:
 	static battleMenuState m_battleMenuState;
 	SDL_Surface* bg;
+	void handleAct();
+	void handleArt();
+	void handleEnemy(battleState* battle);
 
 };
 

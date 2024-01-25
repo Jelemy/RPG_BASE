@@ -12,11 +12,16 @@ battleState battleState::m_battleState;
 
 battleManager* bManager;
 battleDrawer* bDrawer;
+std::unordered_map<string, artInfo> artsInfo;
 entities enemyParty;
 
 void battleState::init()
 {
 	std::vector<std::unique_ptr<action>> initialActions;
+	artInfo art1 = make_tuple("magic_damage", 3, 10, "Deals fire magic damage");
+    artInfo art2 = make_tuple("physical_damage", 5, 10, "Deals light damage");
+    artInfo art3 = make_tuple("heal", 5, 40, "Restores 40 HP");
+    artsInfo.insert({{"Fire", art1},{"Mega Bash", art2}, {"Heal", art3}});
 
 	// Adding actions to the list
 	initialActions.push_back(std::make_unique<action>(BATTLESTART));
@@ -25,6 +30,7 @@ void battleState::init()
 	battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
 
 	this->changeBattleState(nextState);
+	
 	std::cout << playerParty[0]->getComponent<statsComponent>().HP() << std::endl;
 
 	std::vector<std::string> arts1 = {"Fire", "Mega Bash"};
@@ -33,10 +39,13 @@ void battleState::init()
 	auto& enemy2(manager.addEntity());
 	enemy1.addComponent<statsComponent>("enemy1", 100, 100, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
 	enemy2.addComponent<statsComponent>("enemy2", 100, 100, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
+	enemy1.addComponent<tSpriteComponent>("assets/fridgedonkey2.png", 130, 170);
+    enemy2.addComponent<tSpriteComponent>("assets/fridgedonkey.png", 320, 170);
 	enemyParty = {&enemy1, &enemy2};
 
 	bManager = new battleManager(playerParty, enemyParty);
-	bDrawer = new battleDrawer(playerParty, enemyParty);
+	bDrawer = new battleDrawer();
+	
 
 	//making it so that we make use of global variables instead of simply juts passing
 
@@ -135,6 +144,7 @@ void battleState::draw(game* game)
 {
 	SDL_RenderClear(game::renderer);
 	bDrawer->drawBG();
+	bDrawer->drawEnemy();
 	battleStates.back()->draw(game);
 	SDL_RenderPresent(game::renderer);
 }

@@ -2,10 +2,8 @@
 #include <textureManager.h>
 #include <global.h>
 
-battleDrawer::battleDrawer(entities &playerP, entities &enemyP)
+battleDrawer::battleDrawer()
 {
-    playerParty = playerP;
-    enemyParty = enemyP;
     partyTurn = false;
     entityTurn = nullptr;
     text = new textManager();
@@ -17,19 +15,21 @@ battleDrawer::battleDrawer(entities &playerP, entities &enemyP)
 	auto& uiPartyBox2(manager.addEntity());
 	auto& uiArrow(manager.addEntity());
     auto& uiArrow2(manager.addEntity());
+    auto& uiArrowDown(manager.addEntity());
 	auto& uiMessage(manager.addEntity());
 	auto& bg(manager.addEntity());
 
-    uiMenu.addComponent<tSpriteComponent>("assets/menubox.png", 40, 150);
-	uiSubMenu.addComponent<tSpriteComponent>("assets/subMenuLarge.png", 147, 150);
+    uiMenu.addComponent<tSpriteComponent>("assets/menubox.png", 20, 150);
+	uiSubMenu.addComponent<tSpriteComponent>("assets/subMenuLarge.png", 127, 150);
 	uiPartyBox1.addComponent<tSpriteComponent>("assets/partyBox2.png", 147, 420);
 	uiPartyBox2.addComponent<tSpriteComponent>("assets/partyBox2.png", 330, 420);
-	uiArrow.addComponent<tSpriteComponent>("assets/arrow.png", 50, 198);
-    uiArrow2.addComponent<tSpriteComponent>("assets/arrow.png", 165, 176);
+	uiArrow.addComponent<tSpriteComponent>("assets/arrow.png", 30, 199);
+    uiArrow2.addComponent<tSpriteComponent>("assets/arrow.png", 145, 176);
+    uiArrowDown.addComponent<tSpriteComponent>("assets/arrow_down.png", 0, 0);
 	uiMessage.addComponent<tSpriteComponent>("assets/dialoguebox.png", 121, 22);
 	bg.addComponent<tSpriteComponent>("assets/plain.png", 0, 0);
 
-    uiBoxes = {&uiMenu, &uiSubMenu, &uiPartyBox1, &uiPartyBox2, &uiMessage, &bg, &uiArrow, &uiArrow2};
+    uiBoxes = {&uiMenu, &uiSubMenu, &uiPartyBox1, &uiPartyBox2, &uiMessage, &bg, &uiArrow, &uiArrow2, &uiArrowDown};
 
 }
 
@@ -79,6 +79,12 @@ void battleDrawer::drawPartyBox(){
     text->displayText(HP2, uiBoxes[3]->getComponent<tSpriteComponent>().getX() + 15, uiBoxes[2]->getComponent<tSpriteComponent>().getY() + 37);
     text->displayText(MP2, uiBoxes[3]->getComponent<tSpriteComponent>().getX() + 110, uiBoxes[2]->getComponent<tSpriteComponent>().getY() + 37);
 }
+
+void battleDrawer::drawEnemy(){
+    enemyParty[0]->getComponent<tSpriteComponent>().draw();
+    enemyParty[1]->getComponent<tSpriteComponent>().draw();
+}
+
 void battleDrawer::drawMessage(){
     uiBoxes[4]->getComponent<tSpriteComponent>().draw();
 }
@@ -89,19 +95,30 @@ void battleDrawer::drawSelect(int move, int action, menuLayer menu){
     if (menu == ACT) {
         int currY = uiBoxes[6]->getComponent<tSpriteComponent>().getY();
         if (action == 0) {
-             uiBoxes[6]->getComponent<tSpriteComponent>().setY(198);
+             uiBoxes[6]->getComponent<tSpriteComponent>().setY(199);
         } else {
-             uiBoxes[6]->getComponent<tSpriteComponent>().setY(currY + (move * 21));
+             uiBoxes[6]->getComponent<tSpriteComponent>().setY(currY + (move * 20));
         }
         uiBoxes[6]->getComponent<tSpriteComponent>().draw();
     }
-    else {
+    else if (menu == ART) {
         int currY = uiBoxes[7]->getComponent<tSpriteComponent>().getY();
         if (action == 0) {
              uiBoxes[7]->getComponent<tSpriteComponent>().setY(176);
         } else {
-             uiBoxes[7]->getComponent<tSpriteComponent>().setY(currY + (move * 21));
+             uiBoxes[7]->getComponent<tSpriteComponent>().setY(currY + (move * 20));
         }
         uiBoxes[7]->getComponent<tSpriteComponent>().draw();
+    }
+    else {
+        
+        int currY = uiBoxes[8]->getComponent<tSpriteComponent>().getY();
+        int enemyX = enemyParty[action]->getComponent<tSpriteComponent>().getX();
+        int enemyY = enemyParty[action]->getComponent<tSpriteComponent>().getY();
+        uiBoxes[8]->getComponent<tSpriteComponent>().setX(enemyX + 90);
+        uiBoxes[8]->getComponent<tSpriteComponent>().setY(enemyY - 10);
+        uiBoxes[8]->getComponent<tSpriteComponent>().draw();
+        
+        
     }
 }
