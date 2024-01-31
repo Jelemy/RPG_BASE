@@ -18,7 +18,22 @@ extern std::unordered_map<string, artInfo> artsInfo;
 
 enum menuLayer
 {
-    ACT, ART, ENEMY
+    ACT, ART, ENEMY, ALLY
+};
+
+enum commands 
+{
+    BASH, ARTS
+};
+
+enum eventType
+{
+    BATTLESTART, VICTORY, DEFEAT, DAMAGE, HEAL, ACTION
+};
+
+enum partyType
+{
+    PLAYER, ENEMIES, THIRD
 };
 
 extern entities enemyParty;

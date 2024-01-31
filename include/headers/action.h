@@ -3,24 +3,29 @@
 #include "ECS.h"
 #include "game.h"
 #include "battleManager.h"
-
-enum actionType
-{
-    BATTLESTART, VICTORY, DEFEAT, DAMAGE, HEAL, ACTION
-};
+#include "battleGlobal.h"
 
 class action {
 private:
-    actionType aType;
+    eventType aType;
     Entity* user;
     Entity* recipient;
     string move;
 
+    eventType event;
+    partyType actionParty;
+    int actionerIndex = 0;
+    commands command;
+    int commandIndex;
+    int recipientIndex;
+    
+
+
+
 public:
-    static battleManager* bm;
-    action (actionType type, Entity* usr, Entity* recip, string mv);
-    action (actionType type);
-    actionType getType();
+    action (eventType aType, Entity* actioner, commands cmd, int cIndex, Entity* recip);
+    action (eventType type);
+    eventType getType();
     Entity* getUser();
     Entity* getRecipient();
     string getMove();

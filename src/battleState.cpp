@@ -43,7 +43,7 @@ void battleState::init()
     enemy2.addComponent<tSpriteComponent>("assets/fridgedonkey.png", 320, 170);
 	enemyParty = {&enemy1, &enemy2};
 
-	bManager = new battleManager(playerParty, enemyParty);
+	bManager = new battleManager();
 	bDrawer = new battleDrawer();
 	
 

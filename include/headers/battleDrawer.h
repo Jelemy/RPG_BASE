@@ -23,7 +23,7 @@ private:
 public:
     battleDrawer();
     void setTurn(Entity* e);
-    void drawMenu();
+    void drawMenu(int currPlayer);
     void drawSubMenu(int currPlayer);
     void drawPartyBox();
     void drawMessage();

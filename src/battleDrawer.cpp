@@ -36,9 +36,9 @@ battleDrawer::battleDrawer()
 void battleDrawer::setTurn(Entity* e){
     entityTurn = e;
 }
-void battleDrawer::drawMenu(){
+void battleDrawer::drawMenu(int currPlayer){
     uiBoxes[0]->getComponent<tSpriteComponent>().draw();
-
+    text->displayText(playerParty[currPlayer]->getComponent<statsComponent>().nme(), uiBoxes[0]->getComponent<tSpriteComponent>().getX() + 20, uiBoxes[0]->getComponent<tSpriteComponent>().getY() + 10);
     text->displayText("Bash", uiBoxes[0]->getComponent<tSpriteComponent>().getX() + 25, uiBoxes[0]->getComponent<tSpriteComponent>().getY() + 45);
     text->displayText("Art", uiBoxes[0]->getComponent<tSpriteComponent>().getX() + 25, uiBoxes[0]->getComponent<tSpriteComponent>().getY() + 65);
 }
@@ -110,7 +110,7 @@ void battleDrawer::drawSelect(int move, int action, menuLayer menu){
         }
         uiBoxes[7]->getComponent<tSpriteComponent>().draw();
     }
-    else {
+    else if (menu == ENEMY) {
         
         int currY = uiBoxes[8]->getComponent<tSpriteComponent>().getY();
         int enemyX = enemyParty[action]->getComponent<tSpriteComponent>().getX();
@@ -118,7 +118,14 @@ void battleDrawer::drawSelect(int move, int action, menuLayer menu){
         uiBoxes[8]->getComponent<tSpriteComponent>().setX(enemyX + 90);
         uiBoxes[8]->getComponent<tSpriteComponent>().setY(enemyY - 10);
         uiBoxes[8]->getComponent<tSpriteComponent>().draw();
+    }
+    else if (menu == ALLY) {
+        int currY = uiBoxes[8]->getComponent<tSpriteComponent>().getY();
+        int partyX = uiBoxes[action + 2]->getComponent<tSpriteComponent>().getX();
+        int partyY = uiBoxes[action + 2]->getComponent<tSpriteComponent>().getY();
         
-        
+        uiBoxes[8]->getComponent<tSpriteComponent>().setX(partyX + 90);
+        uiBoxes[8]->getComponent<tSpriteComponent>().setY(partyY - 10);
+        uiBoxes[8]->getComponent<tSpriteComponent>().draw();
     }
 }

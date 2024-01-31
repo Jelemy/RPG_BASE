@@ -16,7 +16,6 @@ public:
     int selectMove = 0;
 	bool arts = false;
 	bool bash = false;
-	int currPlayer = 0;
 	int optionMax = 1;
 
 	void init();
@@ -38,11 +37,27 @@ protected:
 	battleMenuState() { }
 
 private:
+	std::vector<std::unique_ptr<action>> actionList;
 	static battleMenuState m_battleMenuState;
 	SDL_Surface* bg;
 	void handleAct();
 	void handleArt();
 	void handleEnemy(battleState* battle);
+	void handleAlly(battleState* battle);
+
+	// fill these in and feed to action
+	int currPlayer = 0;
+	int actionerIndex = 0;
+	partyType actionParty;
+	commands command;
+	int commandIndex;
+	int recipientIndex;
+	eventType eType;
+
+
+
+
+	
 
 };
 

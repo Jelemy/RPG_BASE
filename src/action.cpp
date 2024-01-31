@@ -1,13 +1,14 @@
 #include <action.h>
 
-action::action (actionType type, Entity* usr, Entity* recip, string mv){
-    aType = type;
-    user = usr;
-    recipient = recip;
-    move = mv;
+action::action(eventType aType, Entity* actioner, commands cmd, int cIndex, Entity* recip) {
+    event = aType;
+    user = actioner;
+	command = cmd;
+	commandIndex = cIndex;
+	recipient = recip;
 }
 
-action::action (actionType type) 
+action::action (eventType type) 
 {
     aType = type;
     user = nullptr;
@@ -15,7 +16,7 @@ action::action (actionType type)
     move = ""; 
 }
 
-actionType action::getType() 
+eventType action::getType() 
 {
     return aType;
 }
@@ -34,33 +35,46 @@ string action::getMove()
 }
 string action::enact()
 {
-    if (aType == BATTLESTART) {
-        return "Enemy encountered!";
-    }
-    else if (aType == VICTORY) {
-        return "Enemy bested!";
-    }
-    else if (aType == ACTION) {
-        string rName = recipient->getComponent<statsComponent>().nme();
-        string uName = user->getComponent<statsComponent>().nme();
-        if (move == "bash") {
-            return uName + " bashed " + rName;
+    switch (aType) {
+        case BATTLESTART:
+            return "Enemy encountered!";
+        case VICTORY:
+            return "Enemy bested!";
+        case DAMAGE: {
+            string userName = user->getComponent<statsComponent>().nme();
+            string recipName = recipient->getComponent<statsComponent>().nme();
+            string artName = user->getComponent<statsComponent>().art()[commandIndex];
+            int dmg;
+            string line1 = "";
+            
+            switch (command) {
+                case BASH:
+                    dmg = bManager->performAttack(user, recipient);
+                    line1 = userName + " bashed!";
+                    break;      
+                case ARTS:
+                    dmg = bManager->performArt(user, recipient, commandIndex);
+                    line1 = userName + " used " + artName;
+                    break;
+                default:
+                    break;
+            }
+            string line2 = recipName + " takes " + to_string(dmg) + " damage!";
+            return line1 + line2;
         }
-        else {
-            return uName + " used " + move + " on " + rName;
+        case HEAL: {
+            string userName = user->getComponent<statsComponent>().nme();
+            string recipName = recipient->getComponent<statsComponent>().nme();
+            string artName = user->getComponent<statsComponent>().art()[commandIndex];
+            int heal = bManager->performArt(user, recipient, commandIndex);
+            string line1 = userName + " used " + artName;
+            
+            string line2 = recipName + " recovers " + to_string(heal) + " health!";
+            return line1 + line2;
         }
+        default:
+            return "";
+            break;
     }
-    else if (aType == DAMAGE) {
-        string rName = recipient->getComponent<statsComponent>().nme();
-        int dmg = 0;
-        return rName + " took " + (to_string(dmg)) + " points of damage.";
-    }
-    else if (aType == HEAL) {
-        string rName = recipient->getComponent<statsComponent>().nme();
-        int heal = 0;
-        return rName + " recovered " + (to_string(heal)) + " health points";
-    }
-    else {
-        return "Battle was lost!";
-    }
+
 }
