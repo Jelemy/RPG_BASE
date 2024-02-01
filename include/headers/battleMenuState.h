@@ -6,6 +6,7 @@
 #include "SDL_image.h"
 #include "action.h"
 #include "battleGlobal.h"
+#include "battleActionState.h"
 
 class battleMenuState : public battleState
 {

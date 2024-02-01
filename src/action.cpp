@@ -10,7 +10,7 @@ action::action(eventType aType, Entity* actioner, commands cmd, int cIndex, Enti
 
 action::action (eventType type) 
 {
-    aType = type;
+    event = type;
     user = nullptr;
     recipient = nullptr;
     move = ""; 
@@ -35,26 +35,37 @@ string action::getMove()
 }
 string action::enact()
 {
-    switch (aType) {
+    switch (event) {
         case BATTLESTART:
             return "Enemy encountered!";
         case VICTORY:
             return "Enemy bested!";
         case DAMAGE: {
+            printf("ciyayay");
+            std::cout << commandIndex << std::endl;
             string userName = user->getComponent<statsComponent>().nme();
             string recipName = recipient->getComponent<statsComponent>().nme();
-            string artName = user->getComponent<statsComponent>().art()[commandIndex];
+            string artName = "";
+            if (command != BASH) {
+                artName = user->getComponent<statsComponent>().art()[commandIndex];
+            }
             int dmg;
             string line1 = "";
             
             switch (command) {
                 case BASH:
+                    printf("hiyayay");
                     dmg = bManager->performAttack(user, recipient);
-                    line1 = userName + " bashed!";
+                    line1 = userName + " bashed!@";
+                    //printf("enemybahs\n");
+                    //std::cout << enemyParty[1]->getComponent<statsComponent>().HP() << std::endl;
                     break;      
                 case ARTS:
+                    printf("diyayay");
                     dmg = bManager->performArt(user, recipient, commandIndex);
-                    line1 = userName + " used " + artName;
+                    line1 = userName + " used " + artName + "@";
+                    //printf("enemyart\n");
+                    //std::cout << enemyParty[1]->getComponent<statsComponent>().HP() << std::endl;
                     break;
                 default:
                     break;
@@ -67,7 +78,7 @@ string action::enact()
             string recipName = recipient->getComponent<statsComponent>().nme();
             string artName = user->getComponent<statsComponent>().art()[commandIndex];
             int heal = bManager->performArt(user, recipient, commandIndex);
-            string line1 = userName + " used " + artName;
+            string line1 = userName + " used " + artName + "@";
             
             string line2 = recipName + " recovers " + to_string(heal) + " health!";
             return line1 + line2;
@@ -76,5 +87,8 @@ string action::enact()
             return "";
             break;
     }
+    printf("enemy");
+    std::cout << enemyParty[0]->getComponent<statsComponent>().HP() << std::endl;
+
 
 }

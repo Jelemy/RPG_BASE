@@ -50,10 +50,15 @@ void textManager::displayText(string text, int x, int y)
     dst.h = (texH/9)/6.5;
 
     for (char c : text) {
-        src.x = get<0>(glyphs[c]) *texW/9;
-        src.y = get<1>(glyphs[c]) *texH/9;
-        SDL_RenderCopy(game::renderer, glyphAtlas, &src, &dst);
-        dst.x += (texW/9)/11;
+        if (c == '@') {
+            dst.x = x;
+            dst.y += (texH/9)/6;
+        } else {
+            src.x = get<0>(glyphs[c]) *texW/9;
+            src.y = get<1>(glyphs[c]) *texH/9;
+            SDL_RenderCopy(game::renderer, glyphAtlas, &src, &dst);
+            dst.x += (texW/9)/11;
+        }
     }
 
 }

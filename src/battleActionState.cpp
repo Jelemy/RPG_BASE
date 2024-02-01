@@ -14,7 +14,9 @@ battleActionState::battleActionState (actions a) : actionList(std::move(a)){
 void battleActionState::init()
 {
 	printf("hello\n");
-    std::cout << actionList[0]->enact() << std::endl;
+    //std::cout << actionList[0]->enact() << std::endl;
+	currLine = actionList[0]->enact();
+	std::cout << currLine << std::endl;
 }
 
 void battleActionState::clean()
@@ -52,6 +54,10 @@ void battleActionState::handleSubEvents(battleState* battle)
                             currAction++;
 							std::cout << currAction << std::endl;
 							std::cout << actionList.size() << std::endl;
+							currLine = actionList[currAction]->enact();
+							printf("lol");
+							std::cout << currAction << std::endl;
+							std::cout << actionList.size() << std::endl;
                         }
 						else if  (currAction == actionList.size() - 1) {
 							printf("menu");
@@ -72,5 +78,5 @@ void battleActionState::update(game* game)
 void battleActionState::draw(game* game) 
 {
     bDrawer->drawMessage();
-    bDrawer->drawText(actionList[currAction]->enact());
+    bDrawer->drawText(currLine);
 }

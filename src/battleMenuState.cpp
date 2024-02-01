@@ -17,6 +17,12 @@ battleMenuState battleMenuState::m_battleMenuState;
 
 void battleMenuState::init()
 {
+    currLayer = ACT;
+    actionerIndex = 0;
+    currPlayer = 0;
+    selectMove = 0;
+    actionSelect = 0;
+    actionList.clear();
     printf("menu\n");
     std::cout << playerParty[0]->getComponent<statsComponent>().HP() << std::endl;
     std::cout << playerParty.size() << std::endl;
@@ -185,8 +191,8 @@ void battleMenuState::handleEnemy(battleState* battle) {
                         recipientIndex = actionSelect;
                         actionList.push_back(std::make_unique<action>(eType, playerParty[actionerIndex], command, commandIndex, enemyParty[recipientIndex]));
                         if (actionList.size() == playerParty.size()) {
-                            //battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
-	                        //this->changeBattleState(nextState);
+                            battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
+	                        battle->changeBattleState(nextState);
                         } else {
                             currPlayer += 1;
                             actionerIndex += 1;
@@ -238,6 +244,17 @@ void battleMenuState::handleAlly(battleState* battle) {
                         break;
                     case SDLK_RIGHT:
                         recipientIndex = actionSelect;
+                        actionList.push_back(std::make_unique<action>(eType, playerParty[actionerIndex], command, commandIndex, playerParty[recipientIndex]));
+                        if (actionList.size() == playerParty.size()) {
+                            battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
+	                        battle->changeBattleState(nextState);
+                        } else {
+                            currPlayer += 1;
+                            actionerIndex += 1;
+                            actionSelect = 0;
+                            currLayer = ACT;
+                            selectMove = 0;
+                        }
                         break;
                     case SDLK_DOWN:
                         currLayer = ART;

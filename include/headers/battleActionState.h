@@ -37,6 +37,7 @@ public:
 
 private:
 	actions actionList;
+	string currLine;
 	battleActionState(actions a);
 	//static battleActionState m_battleActionState;
 	SDL_Surface* bg;
