@@ -4,12 +4,12 @@
 #include <gameState.h>
 #include <battleMenuState.h>
 #include <global.h>
-
+#include <enemyAI.h>
 
 
 
 battleMenuState battleMenuState::m_battleMenuState;
-
+enemyAI* eAI;
 // Manager is a class that manages all the entities.
 
 
@@ -26,6 +26,8 @@ void battleMenuState::init()
     printf("menu\n");
     std::cout << playerParty[0]->getComponent<statsComponent>().HP() << std::endl;
     std::cout << playerParty.size() << std::endl;
+
+    eAI = new enemyAI();
 
 }
 
@@ -191,6 +193,9 @@ void battleMenuState::handleEnemy(battleState* battle) {
                         recipientIndex = actionSelect;
                         actionList.push_back(std::make_unique<action>(eType, playerParty[actionerIndex], command, commandIndex, enemyParty[recipientIndex]));
                         if (actionList.size() == playerParty.size()) {
+                            for (Entity* enemy: enemyParty) {
+                                actionList.push_back(eAI->generateAction(enemy));
+                            }
                             battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
 	                        battle->changeBattleState(nextState);
                         } else {
@@ -246,6 +251,9 @@ void battleMenuState::handleAlly(battleState* battle) {
                         recipientIndex = actionSelect;
                         actionList.push_back(std::make_unique<action>(eType, playerParty[actionerIndex], command, commandIndex, playerParty[recipientIndex]));
                         if (actionList.size() == playerParty.size()) {
+                            for (Entity* enemy: enemyParty) {
+                                actionList.push_back(eAI->generateAction(enemy));
+                            }
                             battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
 	                        battle->changeBattleState(nextState);
                         } else {
