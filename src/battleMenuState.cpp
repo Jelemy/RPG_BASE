@@ -165,7 +165,7 @@ void battleMenuState::handleArt() {
 }
 
 void battleMenuState::handleEnemy(battleState* battle) {
-    optionMax = 1;
+    optionMax = enemyParty.size() - 1;
     SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -253,6 +253,7 @@ void battleMenuState::handleAlly(battleState* battle) {
                         if (actionList.size() == playerParty.size()) {
                             for (Entity* enemy: enemyParty) {
                                 actionList.push_back(eAI->generateAction(enemy));
+                                
                             }
                             battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
 	                        battle->changeBattleState(nextState);

@@ -50,17 +50,19 @@ void battleActionState::handleSubEvents(battleState* battle)
 					case SDLK_RIGHT:
                         printf("HI");
                         if (currAction < actionList.size() - 1) {
-							printf("lol");
                             currAction++;
-							std::cout << currAction << std::endl;
-							std::cout << actionList.size() << std::endl;
 							currLine = actionList[currAction]->enact();
-							printf("lol");
-							std::cout << currAction << std::endl;
-							std::cout << actionList.size() << std::endl;
                         }
 						else if  (currAction == actionList.size() - 1) {
-							printf("menu");
+							for (auto it = enemyParty.begin(); it != enemyParty.end();) {
+								if ((*it)->getComponent<statsComponent>().HP() <= 0) {
+									it = enemyParty.erase(it);
+								} else {
+									++it;
+								}
+							}
+							printf("enemy size");
+							std::cout << enemyParty.size() << std::endl;
 							battle->changeBattleState(battleMenuState::instance());
 						}
                         break;	

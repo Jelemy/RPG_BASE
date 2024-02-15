@@ -81,8 +81,9 @@ void battleDrawer::drawPartyBox(){
 }
 
 void battleDrawer::drawEnemy(){
-    enemyParty[0]->getComponent<tSpriteComponent>().draw();
-    enemyParty[1]->getComponent<tSpriteComponent>().draw();
+    for (Entity* enemy: enemyParty) {
+        enemy->getComponent<tSpriteComponent>().draw();                    
+    }
 }
 
 void battleDrawer::drawMessage(){

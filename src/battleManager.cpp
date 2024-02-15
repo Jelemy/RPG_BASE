@@ -79,7 +79,7 @@ int battleManager::performMagic(Entity* actioner, string art, Entity* recipient)
     // Check if user has enough mp and reduce user MP
     int userMP = actioner->getComponent<statsComponent>().MP();
     if (userMP < get<1>(artsInfo[art])){
-        return -1;
+        return 0;
     }
     actioner->getComponent<statsComponent>().setMP(userMP - get<1>(artsInfo[art]));
 
