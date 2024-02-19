@@ -45,6 +45,8 @@ private:
 	void handleArt();
 	void handleEnemy(battleState* battle);
 	void handleAlly(battleState* battle);
+	int findNextAlive(int index);
+	int getNumAlive();
 
 	// fill these in and feed to action
 	int currPlayer = 0;

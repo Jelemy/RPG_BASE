@@ -40,10 +40,8 @@ void overWorldState::init()
 	std::vector<std::string> arts2 = {"Heal"};
     // make arts dictionary
 	
-	party1.addComponent<statsComponent>("party1", 100, 100, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
-	party2.addComponent<statsComponent>("party2", 100, 100, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
-	enemy1.addComponent<statsComponent>("enemy1", 100, 100, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
-	enemy2.addComponent<statsComponent>("enemy2", 100, 100, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
+	party1.addComponent<statsComponent>("party1", 30, 30, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
+	party2.addComponent<statsComponent>("party2", 30, 30, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
 	// new
 	playerParty = {&party1, &party2};
 }

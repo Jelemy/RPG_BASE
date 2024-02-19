@@ -18,8 +18,7 @@ enemyAI* eAI;
 void battleMenuState::init()
 {
     currLayer = ACT;
-    actionerIndex = 0;
-    currPlayer = 0;
+    currPlayer = findNextAlive(0);
     selectMove = 0;
     actionSelect = 0;
     actionList.clear();
@@ -31,6 +30,34 @@ void battleMenuState::init()
 
 }
 
+int battleMenuState::findNextAlive(int index) {
+    int partySize = playerParty.size();
+    int currentIndex = index % partySize;  // Normalize the start index
+
+    // Iterate through the player party to find the next alive member
+    int iterations = 0;  // Track the number of iterations
+    while (iterations < partySize) {
+        if (playerParty[currentIndex]->getComponent<statsComponent>().HP() > 0) {
+            // Found an alive member, return its index
+            return currentIndex;
+        }
+        currentIndex = (currentIndex + 1) % partySize;  // Move to the next index
+        iterations++;  // Increment the iteration count
+    }
+
+    // If looped through the entire party once, return -1 to indicate no alive member found
+    return -1;  // Or any other suitable indicator for no alive member found
+}
+
+int battleMenuState::getNumAlive() {
+    int numAlive = 0;
+    for (Entity* player: playerParty) {
+        if (player->getComponent<statsComponent>().HP() > 0) {
+            numAlive++;
+        }                    
+    }
+    return numAlive;
+}
 void battleMenuState::clean()
 {
 	printf("battleMenuState Cleanup\n");
@@ -116,7 +143,7 @@ void battleMenuState::handleAct() {
 
 void battleMenuState::handleArt() {
 
-    optionMax = playerParty[actionerIndex]->getComponent<statsComponent>().art().size() - 1;
+    optionMax = playerParty[currPlayer]->getComponent<statsComponent>().art().size() - 1;
     SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -191,16 +218,15 @@ void battleMenuState::handleEnemy(battleState* battle) {
                         break;
                     case SDLK_RIGHT:
                         recipientIndex = actionSelect;
-                        actionList.push_back(std::make_unique<action>(eType, playerParty[actionerIndex], command, commandIndex, enemyParty[recipientIndex]));
-                        if (actionList.size() == playerParty.size()) {
+                        actionList.push_back(std::make_unique<action>(eType, playerParty[currPlayer], command, commandIndex, enemyParty[recipientIndex]));
+                        if (actionList.size() == getNumAlive()) {
                             for (Entity* enemy: enemyParty) {
                                 actionList.push_back(eAI->generateAction(enemy));
                             }
                             battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
 	                        battle->changeBattleState(nextState);
                         } else {
-                            currPlayer += 1;
-                            actionerIndex += 1;
+                            currPlayer = findNextAlive(currPlayer + 1);
                             actionSelect = 0;
                             currLayer = ACT;
                             selectMove = 0;
@@ -249,8 +275,8 @@ void battleMenuState::handleAlly(battleState* battle) {
                         break;
                     case SDLK_RIGHT:
                         recipientIndex = actionSelect;
-                        actionList.push_back(std::make_unique<action>(eType, playerParty[actionerIndex], command, commandIndex, playerParty[recipientIndex]));
-                        if (actionList.size() == playerParty.size()) {
+                        actionList.push_back(std::make_unique<action>(eType, playerParty[currPlayer], command, commandIndex, playerParty[recipientIndex]));
+                        if (actionList.size() == getNumAlive()) {
                             for (Entity* enemy: enemyParty) {
                                 actionList.push_back(eAI->generateAction(enemy));
                                 
@@ -258,8 +284,7 @@ void battleMenuState::handleAlly(battleState* battle) {
                             battleActionState* nextState = battleActionState::createInstance(std::move(actionList));
 	                        battle->changeBattleState(nextState);
                         } else {
-                            currPlayer += 1;
-                            actionerIndex += 1;
+                            currPlayer = findNextAlive(currPlayer + 1);
                             actionSelect = 0;
                             currLayer = ACT;
                             selectMove = 0;
@@ -283,7 +308,7 @@ void battleMenuState::update(game* game)
 
 void battleMenuState::draw(game* game) 
 {
-    bDrawer->drawMenu(actionerIndex);
+    bDrawer->drawMenu(currPlayer);
     if (currLayer == ART) {
         bDrawer->drawSubMenu(currPlayer);
     }
