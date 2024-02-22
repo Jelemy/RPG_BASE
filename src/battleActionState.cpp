@@ -4,6 +4,7 @@
 #include <gameState.h>
 #include <battleActionState.h>
 #include <battleMenuState.h>
+#include <titleState.h>
 #include <battleGlobal.h>
 
 // Manager is a class that manages all the entities.
@@ -36,10 +37,63 @@ void battleActionState::resume()
 
 void battleActionState::handleEvents(game* game)
 {
-	
+	printf("DI1");
+	SDL_Event event;
+	if (SDL_PollEvent(&event)) {
+		switch (event.type) {
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym) {
+					case SDLK_RIGHT:
+						if  (currAction == actionList.size() - 1 && (battleCondition == WON || battleCondition == LOST)) {
+							game->changeState( titleState::instance() );
+						}
+                        break;	
+				}
+				break;
+		}
+	}
 }
 
-void battleActionState::handleSubEvents(battleState* battle)
+bool battleActionState::checkEnemiesDead() {
+    for (Entity* member : enemyParty) {
+        if (member->getComponent<statsComponent>().HP() > 0) {
+            return false; // At least one party member is alive
+        }
+    }
+    return true; // All party members are dead
+}
+
+bool battleActionState::checkPartyDead() {
+    for (Entity* member : playerParty) {
+        if (member->getComponent<statsComponent>().HP() > 0) {
+            return false; // At least one party member is alive
+        }
+    }
+    return true; // All party members are dead
+}
+
+void battleActionState::updateActionState() {
+	for (auto it = enemyParty.begin(); it != enemyParty.end();) {
+		if ((*it)->getComponent<statsComponent>().HP() <= 0) {
+			it = enemyParty.erase(it);
+		} else {
+			++it;
+		}
+	}
+	
+	if (checkEnemiesDead()) {
+		actionList.clear();
+		actionList.push_back(std::make_unique<action>(VICTORY));
+		currAction = -1;
+		battleCondition = WON;
+	} else if (checkPartyDead()) {
+		actionList.clear();
+		actionList.push_back(std::make_unique<action>(DEFEAT));
+		currAction = -1;
+		battleCondition = LOST;
+	}
+}
+void battleActionState::handleSubEvents(battleState* battle, game* game)
 {
 
 	SDL_Event event;
@@ -49,21 +103,29 @@ void battleActionState::handleSubEvents(battleState* battle)
 				switch (event.key.keysym.sym) {
 					case SDLK_RIGHT:
                         printf("HI");
-                        if (currAction < actionList.size() - 1) {
+						std::cout << actionList.size()<< std::endl;
+						std::cout << currAction << std::endl;
+						std::cout << (currAction <= actionList.size()) << std::endl;
+						if (currAction == -1) {
+							currAction++;
+							currLine = actionList[currAction]->enact();
+						}
+                        else if (currAction < (actionList.size() - 1)) {
+							printf("in");
                             currAction++;
 							currLine = actionList[currAction]->enact();
+							if (battleCondition == CONTINUE) {
+								updateActionState();
+							}
                         }
 						else if  (currAction == actionList.size() - 1) {
-							for (auto it = enemyParty.begin(); it != enemyParty.end();) {
-								if ((*it)->getComponent<statsComponent>().HP() <= 0) {
-									it = enemyParty.erase(it);
-								} else {
-									++it;
-								}
+							if  (battleCondition == WON || battleCondition == LOST) {
+								game->changeState( titleState::instance() );
+							} else if (battleCondition == CONTINUE) {
+								printf("enemy size");
+								std::cout << enemyParty.size() << std::endl;
+								battle->changeBattleState(battleMenuState::instance());
 							}
-							printf("enemy size");
-							std::cout << enemyParty.size() << std::endl;
-							battle->changeBattleState(battleMenuState::instance());
 						}
                         break;	
 				}

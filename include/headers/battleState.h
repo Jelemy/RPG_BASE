@@ -25,7 +25,7 @@ public:
 	void resume();
 
 	void handleEvents(game* game);
-	virtual void handleSubEvents(battleState* battle) {};
+	virtual void handleSubEvents(battleState* battle, game* game) {};
 	void update(game* game);
 	void draw(game* game);
 

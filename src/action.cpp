@@ -40,6 +40,8 @@ string action::enact()
             return "Enemy encountered!";
         case VICTORY:
             return "Enemy bested!";
+        case DEFEAT:
+            return "The party was defeated..";
         case DAMAGE: {
             printf("ciyayay");
             std::cout << commandIndex << std::endl;
@@ -79,8 +81,17 @@ string action::enact()
             string artName = user->getComponent<statsComponent>().art()[commandIndex];
             int heal = bManager->performArt(user, recipient, commandIndex);
             string line1 = userName + " used " + artName + "@";
-            
-            string line2 = recipName + " recovers " + to_string(heal) + " health!";
+            string line2 = "";
+            if (heal >= 0 ) {
+                line2 = recipName + " recovers " + to_string(heal) + " health!";
+                return line1 + line2;
+            }
+            else if (heal == -1) {
+                line2 = "It failed due to lack of MP!";
+            }
+            else if (heal == -2) {
+                line2 = "Incapicitated allies can't be healed!";
+            }
             return line1 + line2;
         }
         default:

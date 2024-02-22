@@ -79,7 +79,7 @@ void battleMenuState::handleEvents(game* game)
 }
 
 // split logic into differen handler functions
-void battleMenuState::handleSubEvents(battleState* battle)
+void battleMenuState::handleSubEvents(battleState* battle, game* game)
 {
     if (currLayer == ACT) {
         handleAct();

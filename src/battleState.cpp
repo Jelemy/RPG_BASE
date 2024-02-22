@@ -20,7 +20,7 @@ void battleState::init()
 	std::vector<std::unique_ptr<action>> initialActions;
 	artInfo art1 = make_tuple("magic_damage", 3, 10, "Deals fire magic damage");
     artInfo art2 = make_tuple("physical_damage", 5, 10, "Deals light damage");
-    artInfo art3 = make_tuple("heal", 5, 40, "Restores 40 HP");
+    artInfo art3 = make_tuple("heal", 5, 10, "Restores 10 HP");
     artsInfo.insert({{"Fire", art1},{"Mega Bash", art2}, {"Heal", art3}});
 
 	// Adding actions to the list
@@ -37,8 +37,8 @@ void battleState::init()
 
 	auto& enemy1(manager.addEntity());
 	auto& enemy2(manager.addEntity());
-	enemy1.addComponent<statsComponent>("enemy1", 20, 20, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
-	enemy2.addComponent<statsComponent>("enemy2", 20, 20, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
+	enemy1.addComponent<statsComponent>("enemy1", 10, 10, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
+	enemy2.addComponent<statsComponent>("enemy2", 10, 10, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
 	enemy1.addComponent<tSpriteComponent>("assets/fridgedonkey2.png", 130, 170);
     enemy2.addComponent<tSpriteComponent>("assets/fridgedonkey.png", 320, 170);
 	enemyParty = {&enemy1, &enemy2};
@@ -111,7 +111,8 @@ void battleState::resume()
 void battleState::handleEvents(game* game)
 {
 	// let current battle state handle events
-	battleStates.back()->handleSubEvents(this);
+	battleStates.back()->handleSubEvents(this, game);
+	//battleStates.back()->handleEvents(game);
 
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {

@@ -70,7 +70,12 @@ int battleManager::performPhysical(Entity* actioner, string art, Entity* recipie
     int recipientHP = recipient->getComponent<statsComponent>().HP();
 
     int dmg = (str + artDmg)/2 - recipientDef/4;
-    recipient->getComponent<statsComponent>().setHP(recipientHP - dmg);
+    if (recipientHP - dmg < 0) {
+        recipient->getComponent<statsComponent>().setHP(0);
+    }
+    else {
+        recipient->getComponent<statsComponent>().setHP(recipientHP - dmg);
+    }
     return dmg;
     
 }
@@ -90,7 +95,12 @@ int battleManager::performMagic(Entity* actioner, string art, Entity* recipient)
     int recipientHP = recipient->getComponent<statsComponent>().HP();
 
     int dmg = (mag + artDmg)/2 - recipientRes/4;
-    recipient->getComponent<statsComponent>().setHP(recipientHP - dmg);
+    if (recipientHP - dmg < 0) {
+        recipient->getComponent<statsComponent>().setHP(0);
+    }
+    else {
+        recipient->getComponent<statsComponent>().setHP(recipientHP - dmg);
+    }
     return dmg;
     
 }
@@ -107,6 +117,10 @@ int battleManager::performHeal(Entity* actioner, string art, Entity* recipient) 
     int healAmount = get<2>(artsInfo[art]);
     int rHP = recipient->getComponent<statsComponent>().HP();
     int rMaxHP = recipient->getComponent<statsComponent>().maxHP();
+
+    if (rHP <= 0) {
+        return -2;
+    }
     if (rHP + healAmount > rMaxHP) {
         recipient->getComponent<statsComponent>().setHP(rMaxHP);
     }

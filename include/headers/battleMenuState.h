@@ -26,7 +26,7 @@ public:
 	void resume();
 
 	void handleEvents(game* game);
-	void handleSubEvents(battleState* battle) override;
+	void handleSubEvents(battleState* battle, game* game) override;
 	void update(game* game);
 	void draw(game* game);
 

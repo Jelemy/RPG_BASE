@@ -8,7 +8,10 @@
 #include "battleState.h"
 
 typedef std::vector<std::unique_ptr<action>> actions;
-
+enum battleFlowState
+{
+	WON, LOST, CONTINUE
+};
 class battleActionState : public battleState
 {
 public:
@@ -21,7 +24,7 @@ public:
 	void resume();
 
 	void handleEvents(game* game);
-	void handleSubEvents(battleState* battle) override;
+	void handleSubEvents(battleState* battle, game* game) override;
 	void update(game* game);
 	void draw(game* game);
 
@@ -36,9 +39,13 @@ public:
 
 
 private:
+	battleFlowState battleCondition = CONTINUE;
 	actions actionList;
 	string currLine;
 	battleActionState(actions a);
+	bool checkPartyDead();
+	bool checkEnemiesDead();
+	void updateActionState();
 	//static battleActionState m_battleActionState;
 	SDL_Surface* bg;
 
