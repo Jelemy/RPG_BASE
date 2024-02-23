@@ -10,7 +10,7 @@ titleState titleState::m_titleState;
 
 void titleState::init()
 {
-    SDL_Surface* tempSurface = IMG_Load("assets/start.jpg");
+    SDL_Surface* tempSurface = IMG_Load("assets/TitlePlaceHolder.png");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
     SDL_Rect srcRect, destRect;

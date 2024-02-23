@@ -37,21 +37,6 @@ void battleActionState::resume()
 
 void battleActionState::handleEvents(game* game)
 {
-	printf("DI1");
-	SDL_Event event;
-	if (SDL_PollEvent(&event)) {
-		switch (event.type) {
-			case SDL_KEYDOWN:
-				switch (event.key.keysym.sym) {
-					case SDLK_RIGHT:
-						if  (currAction == actionList.size() - 1 && (battleCondition == WON || battleCondition == LOST)) {
-							game->changeState( titleState::instance() );
-						}
-                        break;	
-				}
-				break;
-		}
-	}
 }
 
 bool battleActionState::checkEnemiesDead() {

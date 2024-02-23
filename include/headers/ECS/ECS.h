@@ -1,3 +1,4 @@
+// ECS code taken from this video "https://www.youtube.com/watch?v=QAmtgvwHInM&ab_channel=VittorioRomeo"
 #pragma once
 
 #include <iostream>

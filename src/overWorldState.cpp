@@ -15,35 +15,25 @@ overWorldState overWorldState::m_overWorldState;
 
 // Manager is a class that manages all the entities.
 Manager manager;
-entities playerParty;
-
-// How you add an entity. auto& automatically assigns a variable type.
-auto& entity(manager.addEntity());
 
 void overWorldState::init()
 {
-    // ECS example implementation
-    entity.addComponent<positionComponent>();
-    entity.addComponent<spriteComponent>("assets/dawnWalk.png");
 
-	// new
-
-	// for purpose of testing: create party and enemy entities and add stats component
-	// Load party and enemies into battle manager called battle
-	// initialise first battle state: enemy encounter message
-	auto& party1(manager.addEntity());
-	auto& party2(manager.addEntity());
-	auto& enemy1(manager.addEntity());
-	auto& enemy2(manager.addEntity());
-
-	std::vector<std::string> arts1 = {"Fire", "Mega Bash", "Heal"};
-	std::vector<std::string> arts2 = {"Heal"};
-    // make arts dictionary
-	
-	party1.addComponent<statsComponent>("party1", 30, 5, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
-	party2.addComponent<statsComponent>("party2", 30, 5, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
-	// new
-	playerParty = {&party1, &party2};
+    SDL_Surface* tempSurface = IMG_Load("assets/OverworldPlaceHolder.png");
+    SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+    SDL_Rect srcRect, destRect;
+    srcRect.w = 640;
+    srcRect.h = 480;
+    srcRect.x = 0;
+    srcRect.y = 0;
+    destRect.w = 640;
+    destRect.h = 480;
+    destRect.x = 0;
+    destRect.y = 0;
+    SDL_RenderClear(game::renderer);
+    SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
+    SDL_RenderPresent(game::renderer);
 }
 
 void overWorldState::clean()
@@ -89,14 +79,10 @@ void overWorldState::handleEvents(game* game)
 
 void overWorldState::update(game* game) 
 {
-    manager.refresh();
-    manager.update();
+
 }
 
 void overWorldState::draw(game* game) 
 {
-    SDL_RenderClear(game::renderer);
-    manager.draw();
-    SDL_RenderPresent(game::renderer);
 
 }

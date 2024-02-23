@@ -14,6 +14,7 @@ battleManager* bManager;
 battleDrawer* bDrawer;
 std::unordered_map<string, artInfo> artsInfo;
 entities enemyParty;
+entities playerParty;
 
 void battleState::init()
 {
@@ -24,32 +25,33 @@ void battleState::init()
     artsInfo.insert({{"Fire", art1},{"Mega Bash", art2}, {"Heal", art3}});
 
 	// Adding actions to the list
-	initialActions.push_back(std::make_unique<action>(BATTLESTART));
-	initialActions.push_back(std::make_unique<action>(VICTORY));
-
-	battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
-
-	this->changeBattleState(nextState);
 	
-	std::cout << playerParty[0]->getComponent<statsComponent>().HP() << std::endl;
 
 	std::vector<std::string> arts1 = {"Fire", "Mega Bash"};
+	std::vector<std::string> arts2 = {"Heal"};
 
+	auto& party1(manager.addEntity());
+	auto& party2(manager.addEntity());
 	auto& enemy1(manager.addEntity());
 	auto& enemy2(manager.addEntity());
+	party1.addComponent<statsComponent>("party1", 30, 5, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
+	party2.addComponent<statsComponent>("party2", 30, 5, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
 	enemy1.addComponent<statsComponent>("enemy1", 10, 10, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
 	enemy2.addComponent<statsComponent>("enemy2", 10, 10, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
 	enemy1.addComponent<tSpriteComponent>("assets/fridgedonkey2.png", 130, 170);
     enemy2.addComponent<tSpriteComponent>("assets/fridgedonkey.png", 320, 170);
+	playerParty = {&party1, &party2};
 	enemyParty = {&enemy1, &enemy2};
 
 	bManager = new battleManager();
 	bDrawer = new battleDrawer();
 	
+	initialActions.push_back(std::make_unique<action>(BATTLESTART));
 
+	battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
+
+	this->changeBattleState(nextState);
 	//making it so that we make use of global variables instead of simply juts passing
-
-
 	
 }
 
