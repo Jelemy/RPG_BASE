@@ -44,7 +44,7 @@ void battleDrawer::drawMenu(int currPlayer){
 }
 
 void battleDrawer::drawText(string txt){
-    text->displayText(txt, uiBoxes[4]->getComponent<tSpriteComponent>().getX() + 25, uiBoxes[4]->getComponent<tSpriteComponent>().getY() + 40);
+    text->displayText(txt, uiBoxes[4]->getComponent<tSpriteComponent>().getX() + 25, uiBoxes[4]->getComponent<tSpriteComponent>().getY() + 20);
 }
 void battleDrawer::drawSubMenu(int currPlayer){
 
