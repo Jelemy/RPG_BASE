@@ -17,6 +17,7 @@ overWorldState overWorldState::m_overWorldState;
 // Manager is a class that manages all the entities.
 Manager manager;
 auto& player(manager.addEntity());
+SDL_Event overWorldState:: event;
 
 void overWorldState::init()
 {
@@ -37,8 +38,10 @@ void overWorldState::init()
     SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
     SDL_RenderPresent(game::renderer);
 */
+	// error happening because we are readding componesnts everytime we go back to tis state:
 	player.addComponent<transformComponent>();
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png");
+    player.addComponent<KeyboardController>();
 }
 
 void overWorldState::clean()
@@ -58,8 +61,6 @@ void overWorldState::resume()
 
 void overWorldState::handleEvents(game* game)
 {
-	SDL_Event event;
-
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_QUIT:
@@ -86,7 +87,7 @@ void overWorldState::update(game* game)
 {
 	manager.refresh();
 	manager.update();
-	player.getComponent<transformComponent>().position.Add(Vector2D(5, 0));
+	//player.getComponent<transformComponent>().position.Add(Vector2D(5, 0));
 
 }
 

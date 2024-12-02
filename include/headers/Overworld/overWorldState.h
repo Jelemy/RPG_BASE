@@ -1,5 +1,4 @@
-#ifndef overWorldState_h
-#define overWorldState_h
+#pragma once
 
 #include "SDL.h"
 #include "SDL_image.h"
@@ -14,6 +13,12 @@ class overWorldState : public gameState
 public:
 	static battleManager* battle;
 	static battleDrawer* bDrawer;
+	static SDL_Event event;
+
+    static SDL_Event& getEvent() {
+        return event;
+    }
+
 	void init();
 	void clean();
 
@@ -36,5 +41,3 @@ private:
 
 	SDL_Surface* bg;
 };
-
-#endif

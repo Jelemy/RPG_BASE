@@ -3,6 +3,8 @@
 #include "components.h"
 #include <vector>
 #include <tuple>
+#include <string>
+using namespace std;
 
 typedef std::vector<std::string> arts;
 
