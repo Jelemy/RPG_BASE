@@ -14,11 +14,18 @@ private:
 
 public:
     spriteComponent() = default;
+
     spriteComponent(const char* path)
     {
         texture = textureManager::loadTexture(path);
         currentFrame = 0;
     }
+
+    ~spriteComponent()
+    {
+        SDL_DestroyTexture(texture);
+    }
+
     void init() override
     {
         transform = &entity->getComponent<transformComponent>();

@@ -11,6 +11,7 @@
 #include <components.h>
 #include <global.h>
 #include <Vector2D.h>
+#include <map.h>
 
 overWorldState overWorldState::m_overWorldState;
 
@@ -18,6 +19,7 @@ overWorldState overWorldState::m_overWorldState;
 Manager manager;
 auto& player(manager.addEntity());
 SDL_Event overWorldState:: event;
+map* tileMap;
 
 void overWorldState::init()
 {
@@ -42,6 +44,8 @@ void overWorldState::init()
 	player.addComponent<transformComponent>();
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png");
     player.addComponent<KeyboardController>();
+
+    tileMap = new map();
 }
 
 void overWorldState::clean()
@@ -93,20 +97,8 @@ void overWorldState::update(game* game)
 
 void overWorldState::draw(game* game) 
 {
-    SDL_Surface* tempSurface = IMG_Load("assets/OverworldPlaceHolder.png");
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
-    SDL_FreeSurface(tempSurface);
-    SDL_Rect srcRect, destRect;
-    srcRect.w = 640;
-    srcRect.h = 480;
-    srcRect.x = 0;
-    srcRect.y = 0;
-    destRect.w = 640;
-    destRect.h = 480;
-    destRect.x = 0;
-    destRect.y = 0;
     SDL_RenderClear(game::renderer);
-    SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
+    tileMap->drawMap();
 	manager.draw();
     SDL_RenderPresent(game::renderer);
 }
