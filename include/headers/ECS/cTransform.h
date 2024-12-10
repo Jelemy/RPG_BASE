@@ -22,10 +22,27 @@ public:
         position.y = 0.0f;
     }
 
+    transformComponent(int sc)
+    {
+        position.x = 0.0f;
+        position.y = 0.0f;
+        scale = sc;
+    }
+
+
     transformComponent(float x, float y)
     {
         position.x = x;
         position.y = y;
+    }
+
+    transformComponent(float x, float y, int h, int w, int sc)
+    {
+        position.x = x;
+        position.y = y;
+        height = h;
+        width = w;
+        scale = sc;
     }
 
     void init() override

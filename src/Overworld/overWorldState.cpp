@@ -12,12 +12,14 @@
 #include <global.h>
 #include <Vector2D.h>
 #include <map.h>
+#include <collision.h>
 
 overWorldState overWorldState::m_overWorldState;
 
 // Manager is a class that manages all the entities.
 Manager manager;
 auto& player(manager.addEntity());
+auto& wall(manager.addEntity());
 SDL_Event overWorldState:: event;
 map* tileMap;
 
@@ -41,9 +43,15 @@ void overWorldState::init()
     SDL_RenderPresent(game::renderer);
 */
 	// error happening because we are readding componesnts everytime we go back to tis state:
-	player.addComponent<transformComponent>();
-	player.addComponent<spriteComponent>("assets/dawnsheet2.png");
+	player.addComponent<transformComponent>(2);
+	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
+	player.addComponent<colliderComponent>("player");
+
+	wall.addComponent<transformComponent>(300.0f, 300.0f, 300, 20, 1);
+	wall.addComponent<spriteComponent>("assets/dirt.png", "non");
+	wall.addComponent<colliderComponent>("wall");
+
 
     tileMap = new map();
 }
@@ -92,6 +100,11 @@ void overWorldState::update(game* game)
 	manager.refresh();
 	manager.update();
 	//player.getComponent<transformComponent>().position.Add(Vector2D(5, 0));
+	if (collision::AABB(player.getComponent<colliderComponent>().collider,
+		wall.getComponent<colliderComponent>().collider))
+		{
+			std::cout << "wall hit" << std::endl;
+		}
 
 }
 

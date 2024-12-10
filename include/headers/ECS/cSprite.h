@@ -11,14 +11,16 @@ private:
     SDL_Texture *texture;
     SDL_Rect srcRect, dstRect;
     int currentFrame;
+    const char* type;
 
 public:
     spriteComponent() = default;
 
-    spriteComponent(const char* path)
+    spriteComponent(const char* path, const char* t)
     {
         texture = textureManager::loadTexture(path);
         currentFrame = 0;
+        type = t;
     }
 
     ~spriteComponent()
@@ -32,14 +34,24 @@ public:
         int frameW, frameH;
         int texW, texH;
         SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-        frameW = texW/4;
-        frameH = texH/4;
+        frameW = texW;
+        frameH = texH;
         srcRect.x = srcRect.y = 0;
-        srcRect.w = frameW;
-        srcRect.h = frameH;
-        dstRect.w = 36;
-        dstRect.h = 52;
-
+        if (type == "player") {
+            frameW = texW/4;
+            frameH = texH/4;
+            srcRect.w = frameW;
+            srcRect.h = frameH;
+            dstRect.w = frameW * transform->scale;
+            dstRect.h = frameH * transform->scale;
+        }
+        else {
+            srcRect.w = transform->width;
+            srcRect.h = transform->height;
+            dstRect.w = transform->width * transform->scale;
+            dstRect.h = transform->height * transform->scale;
+        }
+        
     }
 
     void update() override

@@ -6,3 +6,4 @@
 #include "cSprite.h"
 #include "cTempSprite.h"
 #include "cKeyboardController.h"
+#include "cCollider.h"
