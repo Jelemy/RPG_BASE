@@ -7,6 +7,9 @@
 #include "battleDrawer.h"
 #include <unordered_map>
 #include <tuple>
+#include <vector>
+
+class colliderComponent;
 
 class overWorldState : public gameState
 {
@@ -14,6 +17,8 @@ public:
 	static battleManager* battle;
 	static battleDrawer* bDrawer;
 	static SDL_Event event;
+	static std::vector<colliderComponent*> colliders;
+	static void addCollider(colliderComponent* collider);
 
     static SDL_Event& getEvent() {
         return event;

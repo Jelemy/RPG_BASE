@@ -1,4 +1,6 @@
 #include <collision.h>
+#include <cCollider.h>
+
 
 bool collision::AABB(const SDL_Rect& recA, const SDL_Rect& recB)
 {
@@ -12,5 +14,15 @@ bool collision::AABB(const SDL_Rect& recA, const SDL_Rect& recB)
         return true;
     }
 
+    return false;
+}
+
+bool collision::AABB(const colliderComponent& colA, const colliderComponent& colB)
+{
+    if(AABB(colA.collider, colB.collider))
+    {
+        std::cout << colA.tag << " hit: " << colB.tag << std::endl;
+        return true;
+    }
     return false;
 }

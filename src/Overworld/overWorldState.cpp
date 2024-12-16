@@ -23,6 +23,13 @@ auto& wall(manager.addEntity());
 SDL_Event overWorldState:: event;
 map* tileMap;
 
+auto& tile0(manager.addEntity());
+auto& tile1(manager.addEntity());
+auto& tile2(manager.addEntity());
+
+
+std::vector<colliderComponent*> overWorldState::colliders;
+
 void overWorldState::init()
 {
 /*
@@ -43,7 +50,15 @@ void overWorldState::init()
     SDL_RenderPresent(game::renderer);
 */
 	// error happening because we are readding componesnts everytime we go back to tis state:
-	player.addComponent<transformComponent>(2);
+
+	tile0.addComponent<tileComponent>(200, 200, 32, 32, 0);
+	tile0.addComponent<colliderComponent>("water");
+	tile1.addComponent<tileComponent>(250, 250, 32, 32, 1);
+	tile1.addComponent<colliderComponent>("dirt");
+	tile2.addComponent<tileComponent>(150, 150, 32, 32, 2);
+	tile2.addComponent<colliderComponent>("grass");
+
+	player.addComponent<transformComponent>(0, 0, 26, 18, 2);
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
 	player.addComponent<colliderComponent>("player");
@@ -100,18 +115,21 @@ void overWorldState::update(game* game)
 	manager.refresh();
 	manager.update();
 	//player.getComponent<transformComponent>().position.Add(Vector2D(5, 0));
-	if (collision::AABB(player.getComponent<colliderComponent>().collider,
-		wall.getComponent<colliderComponent>().collider))
-		{
-			std::cout << "wall hit" << std::endl;
-		}
 
+	for (auto cc : colliders)
+	{
+		collision::AABB(player.getComponent<colliderComponent>(), *cc);
+	}
 }
 
 void overWorldState::draw(game* game) 
 {
     SDL_RenderClear(game::renderer);
-    tileMap->drawMap();
+    //tileMap->drawMap();
 	manager.draw();
     SDL_RenderPresent(game::renderer);
+}
+
+void overWorldState::addCollider(colliderComponent* collider) {
+    colliders.push_back(collider);
 }

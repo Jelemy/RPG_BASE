@@ -16,6 +16,12 @@ private:
 public:
     spriteComponent() = default;
 
+    spriteComponent(const char* path)
+    {
+        texture = textureManager::loadTexture(path);
+        currentFrame = 0;
+    }
+
     spriteComponent(const char* path, const char* t)
     {
         texture = textureManager::loadTexture(path);
