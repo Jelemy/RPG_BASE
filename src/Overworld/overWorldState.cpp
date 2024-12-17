@@ -23,41 +23,29 @@ auto& wall(manager.addEntity());
 SDL_Event overWorldState:: event;
 map* tileMap;
 
+/*
 auto& tile0(manager.addEntity());
 auto& tile1(manager.addEntity());
 auto& tile2(manager.addEntity());
-
+*/
 
 std::vector<colliderComponent*> overWorldState::colliders;
 
 void overWorldState::init()
 {
-/*
-    SDL_Surface* tempSurface = IMG_Load("assets/OverworldPlaceHolder.png");
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
-    SDL_FreeSurface(tempSurface);
-    SDL_Rect srcRect, destRect;
-    srcRect.w = 640;
-    srcRect.h = 480;
-    srcRect.x = 0;
-    srcRect.y = 0;
-    destRect.w = 640;
-    destRect.h = 480;
-    destRect.x = 0;
-    destRect.y = 0;
-    SDL_RenderClear(game::renderer);
-    SDL_RenderCopy(game::renderer, tex, &srcRect, &destRect);
-    SDL_RenderPresent(game::renderer);
-*/
 	// error happening because we are readding componesnts everytime we go back to tis state:
 
+/*
 	tile0.addComponent<tileComponent>(200, 200, 32, 32, 0);
 	tile0.addComponent<colliderComponent>("water");
 	tile1.addComponent<tileComponent>(250, 250, 32, 32, 1);
 	tile1.addComponent<colliderComponent>("dirt");
 	tile2.addComponent<tileComponent>(150, 150, 32, 32, 2);
 	tile2.addComponent<colliderComponent>("grass");
+*/
 
+	map::loadMap("assets/p16x16.map", 16, 16);
+	
 	player.addComponent<transformComponent>(0, 0, 26, 18, 2);
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
@@ -132,4 +120,10 @@ void overWorldState::draw(game* game)
 
 void overWorldState::addCollider(colliderComponent* collider) {
     colliders.push_back(collider);
+}
+
+void overWorldState::addTile(int id, int x, int y)
+{
+	auto& tile(manager.addEntity());
+	tile.addComponent<tileComponent>(x, y, 32, 32, id);
 }

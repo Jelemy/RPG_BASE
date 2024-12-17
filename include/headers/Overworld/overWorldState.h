@@ -19,6 +19,7 @@ public:
 	static SDL_Event event;
 	static std::vector<colliderComponent*> colliders;
 	static void addCollider(colliderComponent* collider);
+	static void addTile(int id, int x, int y);
 
     static SDL_Event& getEvent() {
         return event;
