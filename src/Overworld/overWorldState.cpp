@@ -29,7 +29,17 @@ auto& tile1(manager.addEntity());
 auto& tile2(manager.addEntity());
 */
 
+enum groupLabels : std::size_t
+{
+	groupMap,
+	groupPlayers,
+	groupEnemies,
+	groupColliders
+};
+
 std::vector<colliderComponent*> overWorldState::colliders;
+
+
 
 void overWorldState::init()
 {
@@ -50,10 +60,12 @@ void overWorldState::init()
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
 	player.addComponent<colliderComponent>("player");
+	player.addGroup(groupPlayers);
 
 	wall.addComponent<transformComponent>(300.0f, 300.0f, 300, 20, 1);
 	wall.addComponent<spriteComponent>("assets/dirt.png", "non");
 	wall.addComponent<colliderComponent>("wall");
+	wall.addGroup(groupMap);
 
 
     tileMap = new map();
@@ -110,11 +122,29 @@ void overWorldState::update(game* game)
 	}
 }
 
+auto& tiles(manager.getGroup(groupMap));
+auto& players(manager.getGroup(groupPlayers));
+auto& enemies(manager.getGroup(groupEnemies));
+
+
 void overWorldState::draw(game* game) 
 {
     SDL_RenderClear(game::renderer);
     //tileMap->drawMap();
-	manager.draw();
+	//manager.draw();
+	for (auto& t : tiles)
+	{
+		t->draw();
+	}
+	for (auto& p : players)
+	{
+		p->draw();
+	}
+	for (auto& e : enemies)
+	{
+		e->draw();
+	}	
+
     SDL_RenderPresent(game::renderer);
 }
 
@@ -126,4 +156,5 @@ void overWorldState::addTile(int id, int x, int y)
 {
 	auto& tile(manager.addEntity());
 	tile.addComponent<tileComponent>(x, y, 32, 32, id);
+	tile.addGroup(groupMap);
 }
