@@ -23,6 +23,8 @@ auto& wall(manager.addEntity());
 SDL_Event overWorldState:: event;
 map* tileMap;
 
+const char* mapFile = "assets/tileset.png";
+
 /*
 auto& tile0(manager.addEntity());
 auto& tile1(manager.addEntity());
@@ -54,21 +56,13 @@ void overWorldState::init()
 	tile2.addComponent<colliderComponent>("grass");
 */
 
-	map::loadMap("assets/p16x16.map", 16, 16);
+	map::loadMap("assets/map.map", 20, 15);
 	
 	player.addComponent<transformComponent>(0, 0, 26, 18, 2);
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
 	player.addComponent<colliderComponent>("player");
 	player.addGroup(groupPlayers);
-
-	wall.addComponent<transformComponent>(300.0f, 300.0f, 300, 20, 1);
-	wall.addComponent<spriteComponent>("assets/dirt.png", "non");
-	wall.addComponent<colliderComponent>("wall");
-	wall.addGroup(groupMap);
-
-
-    tileMap = new map();
 }
 
 void overWorldState::clean()
@@ -152,9 +146,9 @@ void overWorldState::addCollider(colliderComponent* collider) {
     colliders.push_back(collider);
 }
 
-void overWorldState::addTile(int id, int x, int y)
+void overWorldState::addTile(int srcX, int srcY, int xpos, int ypos)
 {
 	auto& tile(manager.addEntity());
-	tile.addComponent<tileComponent>(x, y, 32, 32, id);
+	tile.addComponent<tileComponent>(srcX, srcY, xpos, ypos, mapFile);
 	tile.addGroup(groupMap);
 }
