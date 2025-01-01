@@ -17,9 +17,6 @@ public:
 	static battleManager* battle;
 	static battleDrawer* bDrawer;
 	static SDL_Event event;
-	static std::vector<colliderComponent*> colliders;
-	static void addCollider(colliderComponent* collider);
-	static void addTile(int srcX, int srcY, int xpos, int ypos);
 
     static SDL_Event& getEvent() {
         return event;
@@ -38,6 +35,14 @@ public:
 	static overWorldState* instance() {
 		return &m_overWorldState;
 	}
+
+	enum groupLabels : std::size_t
+	{
+		groupMap,
+		groupPlayers,
+		groupEnemies,
+		groupColliders
+	};
 
 protected:
 	overWorldState() { }

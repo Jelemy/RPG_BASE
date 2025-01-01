@@ -19,28 +19,13 @@ overWorldState overWorldState::m_overWorldState;
 // Manager is a class that manages all the entities.
 Manager manager;
 auto& player(manager.addEntity());
-auto& wall(manager.addEntity());
 SDL_Event overWorldState:: event;
 map* tileMap;
 
 const char* mapFile = "assets/tileset.png";
 
-/*
-auto& tile0(manager.addEntity());
-auto& tile1(manager.addEntity());
-auto& tile2(manager.addEntity());
-*/
-
-enum groupLabels : std::size_t
-{
-	groupMap,
-	groupPlayers,
-	groupEnemies,
-	groupColliders
-};
-
-std::vector<colliderComponent*> overWorldState::colliders;
-
+//auto& tiles(manager.getGroup(groupMap));
+//auto& players(manager.getGroup(groupPlayers));
 
 
 void overWorldState::init()
@@ -55,10 +40,11 @@ void overWorldState::init()
 	tile2.addComponent<tileComponent>(150, 150, 32, 32, 2);
 	tile2.addComponent<colliderComponent>("grass");
 */
+	tileMap = new map(mapFile, 1, 32);
 
-	map::loadMap("assets/map.map", 20, 15);
+	tileMap->loadMap("assets/map.map", 20, 15);
 	
-	player.addComponent<transformComponent>(0, 0, 26, 18, 2);
+	player.addComponent<transformComponent>(100, 288, 26, 18, 2);
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
 	player.addComponent<colliderComponent>("player");
@@ -79,6 +65,10 @@ void overWorldState::resume()
 {
 	printf("overWorldState Resume\n");
 }
+
+auto& tiles(manager.getGroup(overWorldState::groupMap));
+auto& players(manager.getGroup(overWorldState::groupPlayers));
+auto& colliders(manager.getGroup(overWorldState::groupColliders));
 
 void overWorldState::handleEvents(game* game)
 {
@@ -106,19 +96,23 @@ void overWorldState::handleEvents(game* game)
 
 void overWorldState::update(game* game) 
 {
+
+	SDL_Rect playerCol = player.getComponent<colliderComponent>().collider;
+	Vector2D playerPos = player.getComponent<transformComponent>().position;
+
+
 	manager.refresh();
 	manager.update();
-	//player.getComponent<transformComponent>().position.Add(Vector2D(5, 0));
 
-	for (auto cc : colliders)
+	for (auto c : colliders)
 	{
-		collision::AABB(player.getComponent<colliderComponent>(), *cc);
+		SDL_Rect cCol = c->getComponent<colliderComponent>().collider;
+		if (collision::AABB(cCol, playerCol))
+		{
+			player.getComponent<transformComponent>().position = playerPos;
+		}
 	}
 }
-
-auto& tiles(manager.getGroup(groupMap));
-auto& players(manager.getGroup(groupPlayers));
-auto& enemies(manager.getGroup(groupEnemies));
 
 
 void overWorldState::draw(game* game) 
@@ -130,25 +124,12 @@ void overWorldState::draw(game* game)
 	{
 		t->draw();
 	}
+	
 	for (auto& p : players)
 	{
 		p->draw();
 	}
-	for (auto& e : enemies)
-	{
-		e->draw();
-	}	
+
 
     SDL_RenderPresent(game::renderer);
-}
-
-void overWorldState::addCollider(colliderComponent* collider) {
-    colliders.push_back(collider);
-}
-
-void overWorldState::addTile(int srcX, int srcY, int xpos, int ypos)
-{
-	auto& tile(manager.addEntity());
-	tile.addComponent<tileComponent>(srcX, srcY, xpos, ypos, mapFile);
-	tile.addGroup(groupMap);
 }

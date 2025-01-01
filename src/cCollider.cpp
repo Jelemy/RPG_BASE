@@ -1,7 +1,16 @@
 #include "cCollider.h"
 #include "overWorldState.h"  // Required for using overWorldState
+#include "textureManager.h"
 
 colliderComponent::colliderComponent(std::string t) : tag(t) {}
+
+colliderComponent::colliderComponent(std::string t, int xpos, int ypos, int size)
+{
+    tag = t;
+    collider.x = xpos;
+    collider.y = ypos;
+    collider.h = collider.w = size;
+}
 
 void colliderComponent::init()
 {
@@ -10,13 +19,23 @@ void colliderComponent::init()
     }
     transform = &entity->getComponent<transformComponent>();
 
-    overWorldState::addCollider(this);  // Use static method from overWorldState
+    tex = textureManager::loadTexture("assets/grass.png");
+    srcR = { 0, 0, 32, 32};
+    destR = { collider.x, collider.y, collider.w, collider.h};
 }
 
 void colliderComponent::update()
 {
-    collider.x = static_cast<int>(transform->position.x);
-    collider.y = static_cast<int>(transform->position.y);
-    collider.w = transform->width * transform->scale;
-    collider.h = transform->height * transform->scale;
+    if (tag != "terrain")
+    {
+        collider.x = static_cast<int>(transform->position.x);
+        collider.y = static_cast<int>(transform->position.y);
+        collider.w = transform->width * transform->scale;
+        collider.h = transform->height * transform->scale;
+    }
+}
+
+void colliderComponent::draw()
+{
+    textureManager::draw(tex, srcR, destR);
 }
