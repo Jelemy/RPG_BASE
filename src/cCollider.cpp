@@ -17,6 +17,7 @@ void colliderComponent::init()
     if (!entity->hasComponent<transformComponent>()) {
         entity->addComponent<transformComponent>();
     }
+    // get entity position
     transform = &entity->getComponent<transformComponent>();
 
     tex = textureManager::loadTexture("assets/grass.png");
@@ -26,12 +27,13 @@ void colliderComponent::init()
 
 void colliderComponent::update()
 {
+    //update position of collider box
     if (tag != "terrain")
     {
         collider.x = static_cast<int>(transform->position.x);
-        collider.y = static_cast<int>(transform->position.y);
-        collider.w = transform->width * transform->scale;
-        collider.h = transform->height * transform->scale;
+        collider.y = static_cast<int>(transform->position.y) + 20;
+        collider.w = 32;
+        collider.h = 32;
     }
 }
 

@@ -21,29 +21,21 @@ Manager manager;
 auto& player(manager.addEntity());
 SDL_Event overWorldState:: event;
 map* tileMap;
-
 const char* mapFile = "assets/tileset.png";
 
-//auto& tiles(manager.getGroup(groupMap));
-//auto& players(manager.getGroup(groupPlayers));
 
 
 void overWorldState::init()
 {
-	// error happening because we are readding componesnts everytime we go back to tis state:
 
-/*
-	tile0.addComponent<tileComponent>(200, 200, 32, 32, 0);
-	tile0.addComponent<colliderComponent>("water");
-	tile1.addComponent<tileComponent>(250, 250, 32, 32, 1);
-	tile1.addComponent<colliderComponent>("dirt");
-	tile2.addComponent<tileComponent>(150, 150, 32, 32, 2);
-	tile2.addComponent<colliderComponent>("grass");
-*/
+	// initialise map with tile atlas, tile scale factor and tile dimensions
+	// use matrix in external file to create tile layout
 	tileMap = new map(mapFile, 1, 32);
-
 	tileMap->loadMap("assets/map.map", 20, 15);
-	
+
+	// create and initialise player entity.
+	// give it a sprite, controller input and make it collidable.
+	// Add it to group (for render layers)
 	player.addComponent<transformComponent>(100, 288, 26, 18, 2);
 	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
     player.addComponent<KeyboardController>();
@@ -92,39 +84,71 @@ void overWorldState::handleEvents(game* game)
 				break;
 		}
 	}
+	Vector2D playerPos = player.getComponent<transformComponent>().position;
+	if (playerPos.x > 640) {
+		game->changeState( battleState::instance() );
+	}
+
 }
 
 void overWorldState::update(game* game) 
 {
+    // Get player's collider box and xy position
+    SDL_Rect& playerCol = player.getComponent<colliderComponent>().collider;
+    Vector2D& playerPos = player.getComponent<transformComponent>().position;
 
-	SDL_Rect playerCol = player.getComponent<colliderComponent>().collider;
-	Vector2D playerPos = player.getComponent<transformComponent>().position;
+    // Store the previous position
+    Vector2D prevPos = playerPos;
 
+    // Update all entities
+    manager.refresh();
+    manager.update();
 
-	manager.refresh();
-	manager.update();
+    // Check collision along the X-axis
+    playerPos.x += player.getComponent<transformComponent>().velocity.x;
+    playerCol.x = static_cast<int>(playerPos.x);
 
-	for (auto c : colliders)
-	{
-		SDL_Rect cCol = c->getComponent<colliderComponent>().collider;
-		if (collision::AABB(cCol, playerCol))
-		{
-			player.getComponent<transformComponent>().position = playerPos;
-		}
-	}
+    for (auto c : colliders)
+    {
+        SDL_Rect cCol = c->getComponent<colliderComponent>().collider;
+        if (collision::AABB(cCol, playerCol))
+        {
+            // Collision detected on the X-axis, revert X movement
+            playerPos.x = prevPos.x;
+            playerCol.x = static_cast<int>(playerPos.x);
+            break;
+        }
+    }
+
+    // Check collision along the Y-axis
+    playerPos.y += player.getComponent<transformComponent>().velocity.y;
+    playerCol.y = static_cast<int>(playerPos.y) + 20;
+
+    for (auto c : colliders)
+    {
+        SDL_Rect cCol = c->getComponent<colliderComponent>().collider;
+        if (collision::AABB(cCol, playerCol))
+        {
+            // Collision detected on the Y-axis, revert Y movement
+            playerPos.y = prevPos.y;
+            playerCol.y = static_cast<int>(playerPos.y) + 20;
+            break;
+        }
+    }
 }
+
+
 
 
 void overWorldState::draw(game* game) 
 {
     SDL_RenderClear(game::renderer);
-    //tileMap->drawMap();
-	//manager.draw();
+	// draw tiles
 	for (auto& t : tiles)
 	{
 		t->draw();
 	}
-	
+	// draw player
 	for (auto& p : players)
 	{
 		p->draw();
