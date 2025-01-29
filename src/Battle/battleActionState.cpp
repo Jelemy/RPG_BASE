@@ -14,10 +14,7 @@ battleActionState::battleActionState (actions a) : actionList(std::move(a)){
 
 void battleActionState::init()
 {
-	printf("hello\n");
-    //std::cout << actionList[0]->enact() << std::endl;
 	currLine = actionList[0]->enact();
-	std::cout << currLine << std::endl;
 }
 
 void battleActionState::clean()
@@ -57,7 +54,10 @@ bool battleActionState::checkPartyDead() {
     return true; // All party members are dead
 }
 
+// Function updates state of the battle. Removes dead enemies and checks..
+// if battle has been won
 void battleActionState::updateActionState() {
+	// Loop through enemy list and remove if HP is 0.
 	for (auto it = enemyParty.begin(); it != enemyParty.end();) {
 		if ((*it)->getComponent<statsComponent>().HP() <= 0) {
 			it = enemyParty.erase(it);
@@ -65,12 +65,15 @@ void battleActionState::updateActionState() {
 			++it;
 		}
 	}
-	
+	// Check if all enemies are dead.
+	// If all dead battle is won
 	if (checkEnemiesDead()) {
 		actionList.clear();
 		actionList.push_back(std::make_unique<action>(VICTORY));
 		currAction = -1;
 		battleCondition = WON;
+	// Check if all player party is dead
+	// If all dead battle is lost
 	} else if (checkPartyDead()) {
 		actionList.clear();
 		actionList.push_back(std::make_unique<action>(DEFEAT));
@@ -86,33 +89,34 @@ void battleActionState::handleSubEvents(battleState* battle, game* game)
 		switch (event.type) {
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
+					// Right arrow key button to progress battle dialogue
 					case SDLK_RIGHT:
-                        printf("HI");
-						std::cout << actionList.size()<< std::endl;
-						std::cout << currAction << std::endl;
-						std::cout << (currAction <= actionList.size()) << std::endl;
+						// condition is fulfilled only if battle has been lost or won
+						// ensures that nothing else is done besides getting the win or lose dialogue
 						if (currAction == -1) {
 							currAction++;
 							currLine = actionList[currAction]->enact();
 						}
+						// If there are still actions to process, increment through actions list and enact..
+						// the action. 
+						// Note: enact executes the action and retruns the battle dialogue to convey the action.
                         else if (currAction < (actionList.size() - 1)) {
-							printf("in");
                             currAction++;
 							currLine = actionList[currAction]->enact();
 							if (battleCondition == CONTINUE) {
 								updateActionState();
 							}
                         }
+						// If at the end of action list, check of battle has been won, lost or ongoing
+						// Quit game if battle is over, or go to menu state if battle is still ongoing
 						else if  (currAction == actionList.size() - 1) {
 							if  (battleCondition == WON || battleCondition == LOST) {
 								game->changeState( titleState::instance() );
 							} else if (battleCondition == CONTINUE) {
-								printf("enemy size");
-								std::cout << enemyParty.size() << std::endl;
 								battle->changeBattleState(battleMenuState::instance());
 							}
 						}
-                        break;	
+                        break;
 				}
 				break;
 		}

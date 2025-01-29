@@ -43,8 +43,6 @@ string action::enact()
         case DEFEAT:
             return "The party was defeated..";
         case DAMAGE: {
-            printf("ciyayay");
-            std::cout << commandIndex << std::endl;
             string userName = user->getComponent<statsComponent>().nme();
             string recipName = recipient->getComponent<statsComponent>().nme();
             string artName = "";
@@ -56,18 +54,17 @@ string action::enact()
             
             switch (command) {
                 case BASH:
-                    printf("hiyayay");
                     dmg = bManager->performAttack(user, recipient);
                     line1 = userName + " bashed!@";
-                    //printf("enemybahs\n");
-                    //std::cout << enemyParty[1]->getComponent<statsComponent>().HP() << std::endl;
                     break;      
                 case ARTS:
-                    printf("diyayay");
                     dmg = bManager->performArt(user, recipient, commandIndex);
-                    line1 = userName + " used " + artName + "@";
-                    //printf("enemyart\n");
-                    //std::cout << enemyParty[1]->getComponent<statsComponent>().HP() << std::endl;
+                    if (dmg == -1) {
+                        line1 = userName + "'s " + artName + " failed!@";
+                        dmg = 0;
+                    } else {
+                        line1 = userName + " used " + artName + "@";
+                    }
                     break;
                 default:
                     break;
@@ -98,8 +95,4 @@ string action::enact()
             return "";
             break;
     }
-    printf("enemy");
-    std::cout << enemyParty[0]->getComponent<statsComponent>().HP() << std::endl;
-
-
 }

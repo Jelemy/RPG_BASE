@@ -33,14 +33,26 @@ void overWorldState::init()
 	tileMap = new map(mapFile, 1, 32);
 	tileMap->loadMap("assets/map.map", 20, 15);
 
-	// create and initialise player entity.
-	// give it a sprite, controller input and make it collidable.
-	// Add it to group (for render layers)
-	player.addComponent<transformComponent>(100, 288, 26, 18, 2);
-	player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
-    player.addComponent<KeyboardController>();
-	player.addComponent<colliderComponent>("player");
-	player.addGroup(groupPlayers);
+    // Check if player entity already has components
+    if (!player.hasComponent<transformComponent>()) {
+		// create and initialise player entity.
+		// give it a sprite, controller input and make it collidable.
+		// Add it to group (for render layers)
+        player.addComponent<transformComponent>(100, 288, 26, 18, 2);
+        player.addComponent<spriteComponent>("assets/dawnsheet2.png", "player");
+        player.addComponent<KeyboardController>();
+        player.addComponent<colliderComponent>("player");
+        player.addGroup(groupPlayers);
+    } 
+    else {
+        // Reset player position if components already exist
+        player.getComponent<transformComponent>().position.x = 100;
+        player.getComponent<transformComponent>().position.y = 288;
+		player.getComponent<transformComponent>().velocity.x = 0;
+		player.getComponent<transformComponent>().velocity.y = 0;
+
+    }
+
 }
 
 void overWorldState::clean()

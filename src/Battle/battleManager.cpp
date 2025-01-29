@@ -35,7 +35,6 @@ string battleManager::checkOutcome()
         return "continue";
     }
 }
-//{}
 
 // return battle message
 int battleManager::performAttack(Entity* actioner, Entity* recipient)
@@ -146,6 +145,4 @@ int battleManager::performArt(Entity* actioner, Entity* recipient, int artIndex)
     else {
         return performHeal(actioner, artName, recipient);
     }
-    
-    
 }

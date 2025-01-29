@@ -6,14 +6,8 @@
 #include <global.h>
 #include <enemyAI.h>
 
-
-
 battleMenuState battleMenuState::m_battleMenuState;
 enemyAI* eAI;
-// Manager is a class that manages all the entities.
-
-
-
 
 void battleMenuState::init()
 {
@@ -22,10 +16,6 @@ void battleMenuState::init()
     selectMove = 0;
     actionSelect = 0;
     actionList.clear();
-    printf("menu\n");
-    std::cout << playerParty[0]->getComponent<statsComponent>().HP() << std::endl;
-    std::cout << playerParty.size() << std::endl;
-
     eAI = new enemyAI();
 
 }
@@ -78,32 +68,37 @@ void battleMenuState::handleEvents(game* game)
 
 }
 
-// split logic into differen handler functions
+// split menu layers into differen handler functions
 void battleMenuState::handleSubEvents(battleState* battle, game* game)
 {
+    // Handle initial actions layer
     if (currLayer == ACT) {
         handleAct();
     }
+    // Handle art selection
     else if (currLayer == ART) {
         handleArt();
     }
+    // Handle enemy target selection
     else if (currLayer == ENEMY) {
         handleEnemy(battle);
     }
+    // Handle ally target selection (for healing and buffs)
     else if (currLayer == ALLY) {
         handleAlly(battle);
     }
 }
 
 void battleMenuState::handleAct() {
+    // define current max actions, should be put into a variable else where
     optionMax = 1;
     SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
+                    // case press up
                     case SDLK_w:
-                        std::cout << get<1>(artsInfo["Heal"]) << std::endl;
                         if (actionSelect == 0) {
                             selectMove = 0;
                         }
@@ -112,6 +107,7 @@ void battleMenuState::handleAct() {
                             actionSelect -= 1;
                         }
                         break;
+                    // case press down
                     case SDLK_s:
                         if (actionSelect == optionMax) {
                             selectMove = 0;
@@ -121,6 +117,7 @@ void battleMenuState::handleAct() {
                             actionSelect += 1;
                         }
                         break;
+                    // case press right arrow key
                     case SDLK_RIGHT:
                         if (actionSelect == 0) {
                             command = BASH;
@@ -218,7 +215,10 @@ void battleMenuState::handleEnemy(battleState* battle) {
                         break;
                     case SDLK_RIGHT:
                         recipientIndex = actionSelect;
+                        // once enemy selected, action is appended to action list
                         actionList.push_back(std::make_unique<action>(eType, playerParty[currPlayer], command, commandIndex, enemyParty[recipientIndex]));
+                        // When all actions is retrieved generate enemy actions and append to action list before changing
+                        // battle action state.
                         if (actionList.size() == getNumAlive()) {
                             for (Entity* enemy: enemyParty) {
                                 actionList.push_back(eAI->generateAction(enemy));
@@ -308,10 +308,13 @@ void battleMenuState::update(game* game)
 
 void battleMenuState::draw(game* game) 
 {
+    // current player passed in so we know which actions and arts to display
     bDrawer->drawMenu(currPlayer);
     if (currLayer == ART) {
         bDrawer->drawSubMenu(currPlayer);
     }
+    // selectMove is the direction the arrow moves in
+    // actionSelect is the current index of the current array of options
     bDrawer->drawSelect(selectMove, actionSelect, currLayer);
     bDrawer->drawPartyBox();
     selectMove = 0;

@@ -4,14 +4,14 @@
 #include <SDL.h>
 #include "textureManager.h"
 
-class tSpriteComponent : public Component
+class bSpriteComponent : public Component
 {
 private:
     SDL_Texture *texture;
     SDL_Rect srcRect, dstRect;
 public:
     
-    tSpriteComponent(const char* path, int x, int y)
+    bSpriteComponent(const char* path, int x, int y)
     {
         texture = textureManager::loadTexture(path);
         int w, h;

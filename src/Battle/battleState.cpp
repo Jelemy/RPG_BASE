@@ -18,40 +18,44 @@ entities playerParty;
 
 void battleState::init()
 {
+	// declare initial actions list with initial battle dialogue
 	std::vector<std::unique_ptr<action>> initialActions;
+
+	// initialise arts art tuple (<art type>, <art cost>, <art base dmg/heal>, <art description>)
 	artInfo art1 = make_tuple("magic_damage", 3, 10, "Deals fire magic damage");
     artInfo art2 = make_tuple("physical_damage", 5, 10, "Deals light damage");
     artInfo art3 = make_tuple("heal", 5, 10, "Restores 10 HP");
     artsInfo.insert({{"Fire", art1},{"Mega Bash", art2}, {"Heal", art3}});
 
-	// Adding actions to the list
-	
-
+	// prepare sets of arts to give to entities
 	std::vector<std::string> arts1 = {"Fire", "Mega Bash"};
 	std::vector<std::string> arts2 = {"Heal"};
 
+	// Create battle entities and apply stats and sprites
 	auto& party1(manager.addEntity());
 	auto& party2(manager.addEntity());
 	auto& enemy1(manager.addEntity());
 	auto& enemy2(manager.addEntity());
-	party1.addComponent<statsComponent>("party1", 30, 5, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
-	party2.addComponent<statsComponent>("party2", 30, 5, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
-	enemy1.addComponent<statsComponent>("enemy1", 10, 10, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
-	enemy2.addComponent<statsComponent>("enemy2", 10, 10, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
-	enemy1.addComponent<tSpriteComponent>("assets/fridgedonkey2.png", 130, 170);
-    enemy2.addComponent<tSpriteComponent>("assets/fridgedonkey.png", 320, 170);
+	party1.addComponent<statsComponent>("Dawn", 30, 30, 20, 20, 10, 10, 16, 10, 10, 10, arts1);
+	party2.addComponent<statsComponent>("Ghost", 30, 30, 20, 20, 10, 10, 15, 10, 10, 10, arts2);
+	enemy1.addComponent<statsComponent>("Fridge Donkey A", 30, 30, 20, 20, 9, 10, 8, 10, 10, 10, arts1);
+	enemy2.addComponent<statsComponent>("Fridge Donkey B", 30, 30, 20, 20, 8, 10, 11, 10, 10, 10, arts1);
+	enemy1.addComponent<bSpriteComponent>("assets/fridgedonkey2.png", 130, 170);
+    enemy2.addComponent<bSpriteComponent>("assets/fridgedonkey.png", 320, 170);
 	playerParty = {&party1, &party2};
 	enemyParty = {&enemy1, &enemy2};
 
+	// Initialise battle manager, which deals with action executions
 	bManager = new battleManager();
+	// Initialise battle drawer which puts things to screen
 	bDrawer = new battleDrawer();
-	
+	// Indicate starting dialogue for battle
 	initialActions.push_back(std::make_unique<action>(BATTLESTART));
 
-	battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
 
+	// Change to battle action sub state.
+	battleActionState* nextState = battleActionState::createInstance(std::move(initialActions));
 	this->changeBattleState(nextState);
-	//making it so that we make use of global variables instead of simply juts passing
 	
 }
 
@@ -112,10 +116,9 @@ void battleState::resume()
 
 void battleState::handleEvents(game* game)
 {
-	// let current battle state handle events
+	// let current sub battle state handle events
 	battleStates.back()->handleSubEvents(this, game);
-	//battleStates.back()->handleEvents(game);
-
+	
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {

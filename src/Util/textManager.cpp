@@ -14,11 +14,6 @@ textManager::textManager()
             i = 0;
             j++;
         }
-        /*
-        std::cout << i << std::endl;
-        std::cout << j << std::endl;
-        std::cout << c << std::endl;
-        */
         glyphIndex ij = make_tuple(i, j);
         glyphs.insert({c, ij});
         i++;
@@ -36,7 +31,8 @@ void textManager::setFont(const char* fileName, int size, SDL_Color colour)
 }
 void textManager::displayText(string text, int x, int y)
 {
-    
+    // Divisions use for tweaking text size
+    // For future may need to implement some system for 
     int texW, texH;
     SDL_QueryTexture(glyphAtlas, NULL, NULL, &texW, &texH);
     SDL_Rect src, dst;
