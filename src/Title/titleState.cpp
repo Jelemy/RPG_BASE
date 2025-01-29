@@ -10,7 +10,7 @@ titleState titleState::m_titleState;
 
 void titleState::init()
 {
-    SDL_Surface* tempSurface = IMG_Load("assets/TitlePlaceHolder.png");
+    SDL_Surface* tempSurface = IMG_Load("assets/Title.png");
     SDL_Texture* tex = SDL_CreateTextureFromSurface(game::renderer, tempSurface);
     SDL_FreeSurface(tempSurface);
     SDL_Rect srcRect, destRect;
@@ -54,7 +54,7 @@ void titleState::handleEvents(game* game)
 
 			case SDL_KEYDOWN:
 				switch (event.key.keysym.sym) {
-					case SDLK_SPACE:
+					case SDLK_RETURN:
 						game->changeState( overWorldState::instance() );
 						break;
 						
