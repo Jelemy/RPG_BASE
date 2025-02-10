@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
 
     g = new game();
     TTF_Init();
-    g->init("gameEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, false);
+    g->init("RPG_BASED", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 640, 480, false);
     g->changeState(titleState::instance());
 
     // Main loop

@@ -101,17 +101,17 @@ void battleState::popBattleState()
 }
 void battleState::clean()
 {
-	printf("battleState Cleanup\n");
+	//printf("battleState Cleanup\n");
 }
 
 void battleState::pause()
 {
-	printf("battleState Pause\n");
+	//printf("battleState Pause\n");
 }
 
 void battleState::resume()
 {
-	printf("battleState Resume\n");
+	//printf("battleState Resume\n");
 }
 
 void battleState::handleEvents(game* game)

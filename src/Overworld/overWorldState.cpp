@@ -57,17 +57,17 @@ void overWorldState::init()
 
 void overWorldState::clean()
 {
-	printf("overWorldState Cleanup\n");
+	//printf("overWorldState Cleanup\n");
 }
 
 void overWorldState::pause()
 {
-	printf("overWorldState Pause\n");
+	//printf("overWorldState Pause\n");
 }
 
 void overWorldState::resume()
 {
-	printf("overWorldState Resume\n");
+	//printf("overWorldState Resume\n");
 }
 
 auto& tiles(manager.getGroup(overWorldState::groupMap));

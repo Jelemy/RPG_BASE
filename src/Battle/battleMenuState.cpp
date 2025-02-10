@@ -50,17 +50,17 @@ int battleMenuState::getNumAlive() {
 }
 void battleMenuState::clean()
 {
-	printf("battleMenuState Cleanup\n");
+	//printf("battleMenuState Cleanup\n");
 }
 
 void battleMenuState::pause()
 {
-	printf("battleMenuState Pause\n");
+	//printf("battleMenuState Pause\n");
 }
 
 void battleMenuState::resume()
 {
-	printf("battleMenuState Resume\n");
+	//printf("battleMenuState Resume\n");
 }
 
 void battleMenuState::handleEvents(game* game)

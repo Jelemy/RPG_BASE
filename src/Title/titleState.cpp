@@ -29,17 +29,17 @@ void titleState::init()
 
 void titleState::clean()
 {
-	printf("titleState Cleanup\n");
+	//printf("titleState Cleanup\n");
 }
 
 void titleState::pause()
 {
-	printf("titleState Pause\n");
+	//printf("titleState Pause\n");
 }
 
 void titleState::resume()
 {
-	printf("titleState Resume\n");
+	//printf("titleState Resume\n");
 }
 
 void titleState::handleEvents(game* game)

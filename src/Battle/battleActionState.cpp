@@ -19,17 +19,17 @@ void battleActionState::init()
 
 void battleActionState::clean()
 {
-	printf("battleActionState Cleanup\n");
+	//printf("battleActionState Cleanup\n");
 }
 
 void battleActionState::pause()
 {
-	printf("battleActionState Pause\n");
+	//printf("battleActionState Pause\n");
 }
 
 void battleActionState::resume()
 {
-	printf("battleActionState Resume\n");
+	//printf("battleActionState Resume\n");
 }
 
 void battleActionState::handleEvents(game* game)
