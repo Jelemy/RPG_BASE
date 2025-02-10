@@ -8,20 +8,6 @@ In it, users can move around an animated character from a top-down perspective a
 
 ![Game Screenshot](assets/game_screenshot2.png)
 
-## Project Dependencies   
-
-### SDL2  
-[Simple DirectMedia Layer (SDL2)](https://www.libsdl.org/) is a cross-platform library used for handling:  
-- **Window management** – Creating and managing the game window.  
-- **Rendering** – Hardware-accelerated rendering of textures and sprites.  
-- **Input handling** – Processing keyboard input for player controls.  
-
-### SDL2_image  
-[SDL2_image](https://github.com/libsdl-org/SDL_image) is an extension of SDL2 that allows the project to load and render image files such as **PNG** and **JPG**, which are used for sprites and textures.  
-
-### SDL2_ttf  
-[SDL2_ttf](https://github.com/libsdl-org/SDL_ttf) provides support for rendering text using **TrueType Fonts (TTF)**. It is used in this project to display UI elements such as dialogue, menus, and battle text.  
-
 ---
 
 ## Initial Project Goals
@@ -30,7 +16,25 @@ In it, users can move around an animated character from a top-down perspective a
 - Explore design patterns
 - Develop a graphical windowed application
 
+---
+
+## Project Dependencies   
+
+### [SDL2](https://www.libsdl.org/)   
+- Creating and managing the game window.  
+- Rendering of textures and sprites.  
+- Processing keyboard input for player controls.  
+
+### [SDL2_image](https://wiki.libsdl.org/SDL2_image/FrontPage)
+- load and render image files such as **PNG** and **JPG**, which are used for sprites and textures.  
+
+### [SDL2_ttf](https://wiki.libsdl.org/SDL2_ttf/FrontPage)  
+- provides support for rendering text using **TrueType Fonts (TTF)**
+
+---
+
 ## Architecture Summary
+
 ### Finite Hierarchical State Machine  
 The project employs a **finite hierarchical state machine** to manage different game states.  
 
@@ -52,6 +56,7 @@ The project uses the **Entity-Component System (ECS)**. Instead of relying on in
 - **Components** – Modular data containers that define an entity’s attributes (e.g., `PositionComponent`, `VelocityComponent`).  
 - **Systems** – Operate on entities with specific components to apply logic (e.g., `RenderSystem` draws all entities with a `SpriteComponent`).  
 
+---
 
 ## Installation  
 
@@ -63,6 +68,4 @@ The project uses the **Entity-Component System (ECS)**. Instead of relying on in
 
 Note: This is a Windows-only build. To run the game on macOS or Linux, you will need to compile the project from source using the appropriate development tools for your platform.
 
-
-
-
+---
