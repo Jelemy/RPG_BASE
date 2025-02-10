@@ -2,7 +2,7 @@
 
 This project is the "base" of a retro RPG, made using C++ and SDL2. 
 
-In it users can move around an animated character from a top-down perspective and try out a Dragon-Quest-Inspired turn based battle system. However, there is no narrative as this project was meant to be a base that can be built upon to create a more traditional RPG experience.
+In it, users can move around an animated character from a top-down perspective and try out a Dragon-Quest-Inspired turn based battle system. However, there is no narrative as this project was meant to be a base that can be built upon to create a more traditional RPG experience.
 
 ![Game Screenshot](assets/game_screenshot1.png)
 
@@ -58,7 +58,7 @@ The project uses the **Entity-Component System (ECS)**. Instead of relying on in
 📥 **[Download Here](https://drive.google.com/drive/folders/1mu17CrUFQ0IOZUafWYAz-7phamCB2YOR?usp=sharing)**  
 
 ### Running the Game  
-1. Download and extract the project folder.  
+1. Download and extract the folder.  
 2. Run the executable file (`main.exe`).  
 
 Note: This is a Windows-only build. To run the game on macOS or Linux, you will need to compile the project from source using the appropriate development tools for your platform.
