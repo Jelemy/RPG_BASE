@@ -1,4 +1,4 @@
-# Personal Project: Retro RPG Base Demo
+# Personal Project: Retro 2D RPG Engine
 
 This project is the "base" of a retro RPG, made using C++ and SDL2. 
 
